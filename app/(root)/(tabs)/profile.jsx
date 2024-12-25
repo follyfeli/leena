@@ -47,7 +47,8 @@ const SettingsItem = ({
 const profile = () => {
   const { user, logout, isAuthenticated, isLoading, refreshUser } = useAuth();
   const router = useRouter();
-
+  const [isUpdating, setIsUpdating] = useState(false);
+  const avatar = require("@/assets/images/default-avatar.png");
   const handleLogout = async () => {
     try {
       await logout();
@@ -58,13 +59,12 @@ const profile = () => {
   };
 
   useEffect(() => {
+    refreshUser();
     console.log("user:", user);
     if (!isAuthenticated && !isLoading) {
       router.replace("/profileScreens/Signin");
     }
   }, [isAuthenticated, isLoading]);
-
-  const [isUpdating, setIsUpdating] = useState(false);
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -124,7 +124,6 @@ const profile = () => {
     const url = await getDownloadURL(imageRef);
     return url;
   };
-  const avatar = require("@/assets/images/default-avatar.png");
 
   return (
     <SafeAreaView className="h-full bg-white">
@@ -173,12 +172,21 @@ const profile = () => {
             icon={icons.calendar}
             title="My Quizzes"
           />
-          <SettingsItem icon={icons.wallet} title="Payments" />
+          <SettingsItem icon={icons.wallet} title="Mes Exercices" />
         </View>
 
         <View className="flex flex-col mt-5 border-t pt-5 border-primary-200">
+          <SettingsItem
+            onPress={() => router.push("/profileScreens/EditProfileScreen")}
+            icon={icons.person}
+            title="Profile"
+          />
           {settings.slice(2).map((item, index) => (
-            <SettingsItem key={index} {...item} />
+            <SettingsItem
+              key={index}
+              {...item}
+              onPress={() => handleSettingPress(item.type)}
+            />
           ))}
         </View>
 

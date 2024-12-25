@@ -71,6 +71,9 @@ export const AuthContextProvider = ({ children }) => {
         userId: data.UserId,
         email: data.email,
         photoURL: data.photoURL,
+        bio: data.bio,
+        website: data.website,
+        socialLinks: data.socialLinks,
       }));
     }
   };

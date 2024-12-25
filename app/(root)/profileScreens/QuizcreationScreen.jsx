@@ -26,7 +26,6 @@ import styles from "../../screens/QuizcreationScreen/styles";
 import {
   QUIZ_CATEGORIES,
   DIFFICULTY_LEVELS,
-  QUIZ_TYPES,
   TIME_LIMITS,
   SCORING_SETTINGS,
 } from "@/components/QuizConstance";
@@ -38,20 +37,8 @@ const QuizcreationScreen = ({ navigation }) => {
   // Step tracking
   const [currentStep, setCurrentStep] = useState(1);
   const [coverImage, setCoverImage] = useState(null);
-  const [questionImage, setQuestionImage] = useState({});
   const totalSteps = 4;
   const [isSaving, setIsSaving] = useState(false);
-
-  /*  const [settings, setSettings] = useState({
-    shuffleQuestions: false,
-    showExplanations: true,
-    allowRetake: true,
-    passingScore: 70,
-    certificateEnabled: false,
-    analyticsEnabled: true,
-    socialSharing: true,
-    accessControl: "public",
-  }); */
 
   // Enhanced state management
   const [quizState, setQuizState] = useState({
