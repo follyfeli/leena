@@ -20,47 +20,9 @@ const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(ReactNativeAsyncStorage),
 });
 const db = getFirestore(app);
-const storage = getStorage(app); // Initialize Firebase Storage
+const storage = getStorage(app);
 
 export const userRef = collection(db, "users");
 export const quizRef = collection(db, "quizzes");
 export const storageUserRef = ref(storage, "users");
-export { auth, db, storage }; // Add storage to exports
-
-/* import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
-import { getAnalytics, isSupported } from "firebase/analytics";
-import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
-import { initializeAuth, getReactNativePersistence } from "firebase/auth";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyA0TER1C_AuZM2Jy0n9Aj-e-bUKiYpcyM0",
-  authDomain: "leena-7fa00.firebaseapp.com",
-  projectId: "leena-7fa00",
-  storageBucket: "leena-7fa00.firebasestorage.app",
-  messagingSenderId: "637788799557",
-  appId: "1:637788799557:web:3c657155d8cb11c2e2d92c",
-  measurementId: "G-9SGEYXQJDM",
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = initializeAuth(app, {
-  persistence: getReactNativePersistence(ReactNativeAsyncStorage),
-});
-const db = getFirestore(app);
-
-let analytics;
-
-isSupported().then((supported) => {
-  if (supported) {
-    analytics = getAnalytics(app);
-  } else {
-    console.log(
-      "Firebase Analytics n'est pas supporté dans cet environnement."
-    );
-  }
-});
-
-export { auth, db, analytics };
- */
+export { auth, db, storage };

@@ -137,7 +137,6 @@ const BusinessCard = ({ business }) => {
               style={{
                 width: 50,
                 height: 90,
-                /*  backgroundColor: "red", */
               }}
               source={require("../assets/lotties/likes.json")}
             />
@@ -195,8 +194,6 @@ const styles = StyleSheet.create({
     bottom: 2,
     right: 10,
     backgroundColor: "rgba(0,0,0,0.3)",
-    /*  height: 30,
-    width: width / 3, */
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 10,

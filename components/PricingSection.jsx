@@ -11,7 +11,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { MotiView } from "moti";
-import styles from "@/app/screens/profilscreens/QuizcreationScreen/styles";
+import styles from "@/app/screens/QuizcreationScreen/styles";
 
 const PricingSection = ({ quizState, setQuizState }) => {
   const [pricingImage, setPricingImage] = useState(null);

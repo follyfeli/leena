@@ -107,14 +107,14 @@ export const DIFFICULTY_LEVELS = [
 export const QUIZ_TYPES = [
   { id: "multiple-choice", name: "Multiple Choice ☑️", icon: "☑️" },
   { id: "true-false", name: "True/False ⚖️", icon: "⚖️" },
-  { id: "open-ended", name: "Open Ended ✏️", icon: "✏️" },
+  /*   { id: "open-ended", name: "Open Ended ✏️", icon: "✏️" },
   { id: "matching", name: "Matching 🔄", icon: "🔄" },
   { id: "ranking", name: "Ranking 📊", icon: "📊" },
   { id: "fill-blanks", name: "Fill in the Blanks 📝", icon: "📝" },
   { id: "sequence", name: "Sequence 📋", icon: "📋" },
   { id: "hotspot", name: "Hotspot 🎯", icon: "🎯" },
   { id: "drag-drop", name: "Drag and Drop 🔄", icon: "🔄" },
-  { id: "essay", name: "Essay 📜", icon: "📜" },
+  { id: "essay", name: "Essay 📜", icon: "📜" }, */
 ];
 
 export const TIME_LIMITS = [

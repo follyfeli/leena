@@ -13,7 +13,7 @@ import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import DropDownPicker from "react-native-dropdown-picker";
 import { MotiView } from "moti";
-import styles from "@/app/screens/profilscreens/QuizcreationScreen/styles";
+import styles from "@/app/screens/QuizcreationScreen/styles";
 import { QUIZ_TYPES } from "@/components/QuizConstance";
 
 const QuestionComponent = ({
@@ -24,76 +24,8 @@ const QuestionComponent = ({
   dropdownStates,
   setDropdownStates,
 }) => {
-  console.log("Current Question State:", currentQuestion);
   const [questionImage, setQuestionImage] = useState(null);
 
-  /*  const pickQuestionImage = async () => {
-    try {
-      const { status } =
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== "granted") {
-        Alert.alert(
-          "Permission needed",
-          "Sorry, we need camera roll permissions to make this work!"
-        );
-        return;
-      }
-
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [16, 9],
-        quality: 0.8,
-      });
-
-      if (!result.canceled && result.assets && result.assets.length > 0) {
-        const selectedImage = result.assets[0];
-        setQuestionImage(selectedImage.uri);
-        setCurrentQuestion({
-          ...currentQuestion,
-          backgroundImage: selectedImage.uri,
-        });
-      }
-    } catch (error) {
-      console.error("Image pick error:", error);
-      Alert.alert("Error", "Failed to pick image");
-    }
-  }; */
-
-  // QuestionComponent.js - Current Implementation
-  /*  const pickQuestionImage = async () => {
-    try {
-      const { status } =
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== "granted") {
-        Alert.alert(
-          "Permission needed",
-          "Sorry, we need camera roll permissions to make this work!"
-        );
-        return;
-      }
-
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [16, 9],
-        quality: 0.8,
-      });
-
-      if (!result.canceled && result.assets && result.assets.length > 0) {
-        const selectedImage = result.assets[0];
-        console.log("Selected Image URI:", selectedImage.uri);
-        setQuestionImage(selectedImage.uri); // This is just for preview
-        setCurrentQuestion({
-          ...currentQuestion,
-          backgroundImage: selectedImage.uri, // This should be setting the URI
-        });
-      }
-    } catch (error) {
-      console.error("Image pick error:", error);
-      Alert.alert("Error", "Failed to pick image");
-    }
-  }; */
   const pickQuestionImage = async () => {
     try {
       const { status } =
@@ -113,7 +45,7 @@ const QuestionComponent = ({
         quality: 0.8,
       });
 
-      if (!result.canceled && result.assets && result.assets.length > 0) {
+      if (!result.canceled) {
         const selectedImage = result.assets[0];
         setQuestionImage(selectedImage.uri);
         setCurrentQuestion({
@@ -133,10 +65,10 @@ const QuestionComponent = ({
       transition={{ type: "timing", duration: 500 }}
       style={styles.section}
     >
-      <Text style={styles.sectionTitle}>
+      <View style={styles.sectionHeader}>
         <Ionicons name="help-circle" size={24} style={styles.sectionIcon} />
-        Question Details
-      </Text>
+        <Text style={styles.sectionTitle}>Question Details</Text>
+      </View>
 
       <View style={[styles.categoryContainer, { zIndex: 3000 }]}>
         <DropDownPicker
@@ -234,7 +166,7 @@ const QuestionComponent = ({
               }
               size={24}
               color={
-                currentQuestion.correctAnswer === index ? "#10B981" : "#6B7280"
+                currentQuestion.correctAnswer === index ? "#FFA500" : "#6B7280"
               }
             />
           </TouchableOpacity>

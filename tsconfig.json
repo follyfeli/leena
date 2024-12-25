@@ -12,6 +12,15 @@
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts"
-, "app/_layout.jsx", "app/(tabs)/home.jsx", "app/(tabs)/_layout.jsx", "app/(tabs)/explore.jsx", "app/+not-found.jsx", "constants/Colors.js", "hooks/useColorScheme.jsx"  ]
+    "expo-env.d.ts",
+    "app/_layout.jsx",
+    "test/(tabs)/home.jsx",
+    "test/(tabs)/_layout.jsx",
+    "test/(tabs)/explore.jsx",
+    "app/+not-found.jsx",
+    "constants/Colors.js",
+    "hooks/useColorScheme.jsx",
+    "app/screens/homescreens/homedetails.jsx",
+    "nativewind-env.d.ts"
+  ]
 }
