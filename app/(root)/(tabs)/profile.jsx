@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   View,
   ActivityIndicator,
+  Share,
 } from "react-native";
 import icons from "@/constants/icons";
 import { settings } from "@/constants/data";
@@ -19,6 +20,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { auth, db } from "@/service/firebase/firebaseconfig";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import * as Sharing from "expo-sharing";
 
 const SettingsItem = ({
   icon,
@@ -55,6 +57,42 @@ const profile = () => {
       router.replace("/profileScreens/Signin");
     } catch (error) {
       console.error("Logout failed:", error);
+    }
+  };
+
+  const shareApp = async () => {
+    try {
+      // Replace these with your actual app store links when published
+      const appStoreLink = "https://apps.apple.com/your-app-link";
+      const playStoreLink = "https://play.google.com/store/apps/your-app-link";
+
+      const message =
+        "Join me on this awesome Quiz App! Challenge yourself and compete with friends!\n\n" +
+        "Download here:\n" +
+        `iOS: ${appStoreLink}\n` +
+        `Android: ${playStoreLink}`;
+
+      // Check if sharing is available on the device
+      const isSharingAvailable = await Sharing.isAvailableAsync();
+
+      if (isSharingAvailable) {
+        try {
+          const result = await Share.share({
+            message,
+            title: "Check out this Quiz App!",
+          });
+
+          if (result.action === Share.sharedAction) {
+            console.log("App shared successfully");
+          }
+        } catch (error) {
+          console.error("Error sharing app:", error);
+        }
+      } else {
+        console.log("Sharing is not available on this device");
+      }
+    } catch (error) {
+      console.error("Error in shareApp:", error);
     }
   };
 
@@ -170,9 +208,9 @@ const profile = () => {
           <SettingsItem
             onPress={() => router.push("/profileScreens/QuizcreationScreen")}
             icon={icons.calendar}
-            title="My Quizzes"
+            title="Create Quizzes"
           />
-          <SettingsItem icon={icons.wallet} title="Mes Exercices" />
+          <SettingsItem icon={icons.calendar} title="My Quizzes" />
         </View>
 
         <View className="flex flex-col mt-5 border-t pt-5 border-primary-200">
@@ -181,13 +219,25 @@ const profile = () => {
             icon={icons.person}
             title="Profile"
           />
-          {settings.slice(2).map((item, index) => (
+          <SettingsItem
+            onPress={shareApp}
+            icon={icons.people}
+            title="Invite Friends"
+          />
+          <SettingsItem icon={icons.bell} title="Notifications" />
+          <SettingsItem
+            onPress={() => router.push("/profileScreens/LanguageSelector")}
+            icon={icons.language}
+            title="Language"
+          />
+          <SettingsItem icon={icons.info} title="Help Center" />
+          {/* {settings.slice(2).map((item, index) => (
             <SettingsItem
               key={index}
               {...item}
               onPress={() => handleSettingPress(item.type)}
             />
-          ))}
+          ))} */}
         </View>
 
         <View className="flex flex-col border-t mt-5 pt-5 border-primary-200">

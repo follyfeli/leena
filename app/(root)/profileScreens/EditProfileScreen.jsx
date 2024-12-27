@@ -21,7 +21,7 @@ const EditProfileScreen = () => {
   const { user, isLoading, refreshUser } = useAuth();
   const [saveloading, setsaveLoading] = useState(false);
   const [profileData, setProfileData] = useState({
-    name: user?.displayName || "",
+    name: user?.name || "",
     bio: user?.bio || "",
     email: user?.email || "",
     phone: user?.phone || "",
@@ -115,7 +115,7 @@ const EditProfileScreen = () => {
       // Update user document in Firestore
       const userRef = doc(db, "users", user.uid);
       await updateDoc(userRef, {
-        displayName: profileData.name,
+        name: profileData.name,
         bio: profileData.bio,
         email: profileData.email,
         website: profileData.website,

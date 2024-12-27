@@ -18,9 +18,11 @@ import { Card, FeaturedCard } from "@/components/Cards";
 import avatar from "@/assets/images/logo.png";
 import { useAuth } from "@/context/authContext";
 import { StatusBar } from "expo-status-bar";
+import { useLanguage } from "@/i18n";
 
 const Home = () => {
   const { isAuthenticated, user } = useAuth();
+  const { t } = useLanguage();
   console.log(user);
   const params = useLocalSearchParams();
   const [loading, setLoading] = useState(false);
@@ -103,7 +105,7 @@ const Home = () => {
 
                 <View className="flex flex-col items-start ml-2 justify-center">
                   <Text className="text-xs font-rubik text-black-100">
-                    Good Morning
+                    {t("homemorning")}
                   </Text>
                   <Text className="text-base font-rubik-medium text-[#003333]">
                     {user?.name}
