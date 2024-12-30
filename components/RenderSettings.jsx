@@ -24,17 +24,11 @@ const RenderSettings = ({
   const [dateType, setDateType] = useState(null);
 
   const handleDateChange = (event, selectedDate) => {
-    setShowDatePicker(false);
+    setShowDatePicker(Platform.OS === "ios");
 
     // Only update if a date was actually selected (user didn't cancel)
-    if (event.type === "set" && selectedDate) {
-      setQuizState((prevState) => ({
-        ...prevState,
-        settings: {
-          ...prevState.settings,
-          [dateType === "start" ? "startDate" : "endDate"]: selectedDate,
-        },
-      }));
+    if (event.type === "dismissed") {
+      return;
     }
 
     if (selectedDate) {
@@ -49,6 +43,24 @@ const RenderSettings = ({
           settings: { ...quizState.settings, endDate: selectedDate },
         });
       }
+      if (
+        dateType === "end" &&
+        updates.startDate &&
+        selectedDate < updates.startDate
+      ) {
+        alert("End date must be after start date");
+        return;
+      }
+      if (
+        dateType === "start" &&
+        updates.endDate &&
+        selectedDate > updates.endDate
+      ) {
+        alert("Start date must be before end date");
+        return;
+      }
+
+      onUpdateSchedule(updates);
     }
   };
 
@@ -83,7 +95,10 @@ const RenderSettings = ({
                     },
                   })
                 }
-                trackColor={{ false: "#E0E0E0", true: "#FFA500" }}
+                trackColor={{ false: "#E0E0E0", true: "#004D4D" }}
+                thumbColor={
+                  quizState.settings.shuffleQuestions ? "#003333" : "#f4f3f4"
+                }
               />
             </View>
 
@@ -97,7 +112,10 @@ const RenderSettings = ({
                     settings: { ...quizState.settings, shuffleAnswers: value },
                   })
                 }
-                trackColor={{ false: "#E0E0E0", true: "#FFA500" }}
+                trackColor={{ false: "#E0E0E0", true: "#004D4D" }}
+                thumbColor={
+                  quizState.settings.shuffleAnswers ? "#003333" : "#f4f3f4"
+                }
               />
             </View>
 
@@ -114,7 +132,10 @@ const RenderSettings = ({
                     },
                   })
                 }
-                trackColor={{ false: "#E0E0E0", true: "#FFA500" }}
+                trackColor={{ false: "#E0E0E0", true: "#004D4D" }}
+                thumbColor={
+                  quizState.settings.showExplanations ? "#003333" : "#f4f3f4"
+                }
               />
             </View>
 
@@ -128,7 +149,10 @@ const RenderSettings = ({
                     settings: { ...quizState.settings, allowRetake: value },
                   })
                 }
-                trackColor={{ false: "#E0E0E0", true: "#FFA500" }}
+                trackColor={{ false: "#E0E0E0", true: "#004D4D" }}
+                thumbColor={
+                  quizState.settings.allowRetake ? "#003333" : "#f4f3f4"
+                }
               />
             </View>
 
@@ -167,7 +191,10 @@ const RenderSettings = ({
                     settings: { ...quizState.settings, showTimer: value },
                   })
                 }
-                trackColor={{ false: "#E0E0E0", true: "#FFA500" }}
+                trackColor={{ false: "#E0E0E0", true: "#004D4D" }}
+                thumbColor={
+                  quizState.settings.showTimer ? "#003333" : "#f4f3f4"
+                }
               />
             </View>
 
@@ -181,7 +208,10 @@ const RenderSettings = ({
                     settings: { ...quizState.settings, allowSkip: value },
                   })
                 }
-                trackColor={{ false: "#E0E0E0", true: "#FFA500" }}
+                trackColor={{ false: "#E0E0E0", true: "#004D4D" }}
+                thumbColor={
+                  quizState.settings.allowSkip ? "#003333" : "#f4f3f4"
+                }
               />
             </View>
           </View>
@@ -204,7 +234,12 @@ const RenderSettings = ({
                     },
                   })
                 }
-                trackColor={{ false: "#E0E0E0", true: "#FFA500" }}
+                trackColor={{ false: "#E0E0E0", true: "#004D4D" }}
+                thumbColor={
+                  quizState.settings.immediateAnswerFeedback
+                    ? "#003333"
+                    : "#f4f3f4"
+                }
               />
             </View>
 
@@ -221,7 +256,10 @@ const RenderSettings = ({
                     },
                   })
                 }
-                trackColor={{ false: "#E0E0E0", true: "#FFA500" }}
+                trackColor={{ false: "#E0E0E0", true: "#004D4D" }}
+                thumbColor={
+                  quizState.settings.showCorrectAnswer ? "#003333" : "#f4f3f4"
+                }
               />
             </View>
 
@@ -238,7 +276,10 @@ const RenderSettings = ({
                     },
                   })
                 }
-                trackColor={{ false: "#E0E0E0", true: "#FFA500" }}
+                trackColor={{ false: "#E0E0E0", true: "#004D4D" }}
+                thumbColor={
+                  quizState.settings.allowAnswerReview ? "#003333" : "#f4f3f4"
+                }
               />
             </View>
           </View>
@@ -261,7 +302,10 @@ const RenderSettings = ({
                     },
                   })
                 }
-                trackColor={{ false: "#E0E0E0", true: "#FFA500" }}
+                trackColor={{ false: "#E0E0E0", true: "#004D4D" }}
+                thumbColor={
+                  quizState.settings.timeLimitEnabled ? "#003333" : "#f4f3f4"
+                }
               />
             </View>
 
@@ -326,7 +370,10 @@ const RenderSettings = ({
                     settings: { ...quizState.settings, negativeMarking: value },
                   })
                 }
-                trackColor={{ false: "#E0E0E0", true: "#FFA500" }}
+                trackColor={{ false: "#E0E0E0", true: "#004D4D" }}
+                thumbColor={
+                  quizState.settings.negativeMarking ? "#003333" : "#f4f3f4"
+                }
               />
             </View>
 
@@ -358,7 +405,7 @@ const RenderSettings = ({
         </View>
 
         {/* Certification Settings */}
-        <View style={styles.subsection}>
+        {/*  * <View style={styles.subsection}>
           <Text style={styles.subsectionTitle}>Certification</Text>
           <View style={styles.settingsGrid}>
             <View style={styles.settingItem}>
@@ -378,7 +425,7 @@ const RenderSettings = ({
               />
             </View>
 
-            {/*  {quizState.settings.certificateEnabled && (
+             {quizState.settings.certificateEnabled && (
               <>
                 <View
                   style={{
@@ -428,21 +475,20 @@ const RenderSettings = ({
                   />
                 </View>
               </>
-            )} */}
+            )} 
           </View>
-        </View>
+        </View>/}
 
         {/* Access Control */}
         <View style={styles.accessSection}>
           <Text style={styles.subsectionTitle}>Access Control</Text>
-          <View style={[styles.halfWidth, { zIndex: 1000 }]}>
+          <View style={{ zIndex: 1000, marginBottom: 20 }}>
             <DropDownPicker
               open={dropdownStates.accessControl}
               value={quizState.settings.accessControl}
               items={[
                 { label: "Public", value: "public" },
                 { label: "Private", value: "password" },
-                { label: "Invite Only", value: "invite" },
               ]}
               setOpen={(open) =>
                 setDropdownStates({ ...dropdownStates, accessControl: open })
@@ -458,6 +504,32 @@ const RenderSettings = ({
               }
               style={[styles.dropdown, styles.enhancedDropdown]}
               placeholder="Select Access Level"
+              labelStyle={{
+                fontFamily: "Rubik-Regular",
+                fontSize: 18,
+                color: "#003333",
+                fontWeight: "bold",
+              }}
+              containerStyle={{
+                borderRadius: 8,
+              }}
+              dropDownContainerStyle={{
+                borderWidth: 1,
+                borderColor: "#E0E0E0",
+                borderRadius: 8,
+                backgroundColor: "#FFF",
+              }}
+              itemStyle={{
+                justifyContent: "flex-start",
+                paddingVertical: 10,
+                paddingHorizontal: 15,
+              }}
+              selectedItemLabelStyle={{
+                color: "#003333",
+                fontFamily: "Rubik-Medium",
+                fontSize: 16,
+                fontWeight: "300",
+              }}
             />
           </View>
 
@@ -535,11 +607,13 @@ const RenderSettings = ({
                     ? quizState.settings.startDate || new Date()
                     : quizState.settings.endDate || new Date()
                 }
-                mode="datetime"
+                mode="date"
                 is24Hour={true}
                 display={Platform.OS === "ios" ? "spinner" : "default"}
                 onChange={handleDateChange}
-                testID="dateTimePicker"
+                minimumDate={
+                  dateType === "end" ? quizState.settings.startDate : new Date()
+                }
               />
             )}
           </View>
@@ -563,7 +637,12 @@ const RenderSettings = ({
                       },
                     })
                   }
-                  trackColor={{ false: "#E0E0E0", true: "#FFA500" }}
+                  trackColor={{ false: "#E0E0E0", true: "#004D4D" }}
+                  thumbColor={
+                    quizState.settings.showResultsImmediately
+                      ? "#003333"
+                      : "#f4f3f4"
+                  }
                 />
               </View>
 
@@ -580,7 +659,12 @@ const RenderSettings = ({
                       },
                     })
                   }
-                  trackColor={{ false: "#E0E0E0", true: "#FFA500" }}
+                  trackColor={{ false: "#E0E0E0", true: "#004D4D" }}
+                  thumbColor={
+                    quizState.settings.showScoreDistribution
+                      ? "#003333"
+                      : "#f4f3f4"
+                  }
                 />
               </View>
 
@@ -597,14 +681,17 @@ const RenderSettings = ({
                       },
                     })
                   }
-                  trackColor={{ false: "#E0E0E0", true: "#FFA500" }}
+                  trackColor={{ false: "#E0E0E0", true: "#004D4D" }}
+                  thumbColor={
+                    quizState.settings.enableLeaderboard ? "#003333" : "#f4f3f4"
+                  }
                 />
               </View>
             </View>
           </View>
 
           {/* Attempts Tracking */}
-          <View style={styles.subsection}>
+          {/*  <View style={styles.subsection}>
             <Text style={styles.subsectionTitle}>Attempts Settings</Text>
             <View style={styles.settingsGrid}>
               <View style={styles.settingItem}>
@@ -646,9 +733,9 @@ const RenderSettings = ({
                     maxLength={2}
                   />
                 </View>
-              )}
+              )}  
             </View>
-          </View>
+          </View> */}
         </View>
       </MotiView>
     </ScrollView>
@@ -881,7 +968,7 @@ const styles = StyleSheet.create({
   settingLabel: {
     fontSize: 16,
     color: "#003333",
-    fontWeight: "200",
+    fontWeight: "300",
   },
   scoringSection: {
     marginTop: 20,
@@ -1052,8 +1139,6 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   settingSubItem: {
-    marginLeft: 20,
-    marginTop: 8,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -1144,7 +1229,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.light,
     borderRadius: 12,
     padding: 10,
-    marginBottom: 16,
+    /*  marginBottom: 16, */
     fontSize: 16,
     fontFamily: FONTS.regular,
     borderWidth: 1,

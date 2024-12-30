@@ -583,5 +583,25 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
   },
+
+  navigationHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  backButton: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: 40,
+    height: 40,
+    marginBottom: 10,
+    borderBottomColor: "#FFFFFF",
+    backgroundColor: "#FFFFFF",
+    borderRadius: 20,
+    marginRight: 40,
+  },
+  backIcon: {
+    color: "#003333",
+    alignSelf: "center",
+  },
 });
 export default styles;

@@ -17,7 +17,6 @@ import NoResults from "@/components/NoResults";
 import { Card, FeaturedCard } from "@/components/Cards";
 import avatar from "@/assets/images/logo.png";
 import { useAuth } from "@/context/authContext";
-import { StatusBar } from "expo-status-bar";
 import { useLanguage } from "@/i18n";
 
 const Home = () => {
@@ -76,7 +75,6 @@ const Home = () => {
 
   return (
     <SafeAreaView className="h-full bg-white">
-      <StatusBar backgroundColor="#003333" />
       <FlatList
         data={properties.properties}
         numColumns={2}

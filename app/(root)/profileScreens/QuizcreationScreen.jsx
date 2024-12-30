@@ -8,14 +8,10 @@ import {
   Image,
   Alert,
   Platform,
-  Switch,
   KeyboardAvoidingView,
-  ActivityIndicator,
 } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-import { collection, addDoc, getDocs } from "firebase/firestore";
-import { db, storage } from "@/service/firebase/firebaseconfig";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { addDoc } from "firebase/firestore";
+import { db } from "@/service/firebase/firebaseconfig";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -41,6 +37,9 @@ const QuizcreationScreen = ({ navigation }) => {
   const [coverImage, setCoverImage] = useState(null);
   const totalSteps = 4;
   const [isSaving, setIsSaving] = useState(false);
+  const handleBack = () => {
+    router.push("/profile");
+  };
 
   // Enhanced state management
   const [quizState, setQuizState] = useState({
@@ -916,7 +915,22 @@ const QuizcreationScreen = ({ navigation }) => {
     >
       <StatusBar backgroundColor="#003333" barStyle="light-content" />
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Create Quiz</Text>
+        <View style={styles.navigationHeader}>
+          <TouchableOpacity
+            onPress={handleBack}
+            style={styles.backButton}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <Ionicons
+              name={Platform.OS === "ios" ? "chevron-back" : "arrow-back"}
+              size={24}
+              color="#FFA500"
+              style={styles.backIcon}
+            />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Create Quiz</Text>
+        </View>
+
         <Text style={styles.headerSubtitle}>
           Step {currentStep} of {totalSteps}
         </Text>
@@ -926,7 +940,7 @@ const QuizcreationScreen = ({ navigation }) => {
 
       <ScrollView style={styles.content}>
         <AnimatePresence>
-          {/*  {currentStep === 1 && renderBasicInfo()}
+          {currentStep === 1 && renderBasicInfo()}
           {currentStep === 2 && renderTargetingInfo()}
           {currentStep === 3 &&
             renderQuestions({
@@ -934,13 +948,12 @@ const QuizcreationScreen = ({ navigation }) => {
               setQuizState,
               dropdownStates,
               setDropdownStates,
-            })} */}
-          {/*   {currentStep === 3 && renderQuestions()} */}
+            })}
           {/* {currentStep === 4 && (
             <PricingSection quizState={quizState} setQuizState={setQuizState} />
           )} */}
           {/*   {currentStep === 4 && RenderSettings()} */}
-          {currentStep === 1 && (
+          {currentStep === 4 && (
             <RenderSettings
               quizState={quizState}
               setQuizState={setQuizState}

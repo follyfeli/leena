@@ -10,7 +10,6 @@ import {
   Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { StatusBar } from "expo-status-bar";
 import { MotiView } from "moti";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@/service/firebase/firebaseconfig";
@@ -180,8 +179,6 @@ const EditProfileScreen = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50">
-      <StatusBar style="dark" />
-
       <ScrollView className="flex-1 px-4">
         <View className="py-4">
           <Text className="text-2xl font-bold text-gray-900 mb-1">

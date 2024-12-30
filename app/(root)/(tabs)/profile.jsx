@@ -19,7 +19,6 @@ import { storage } from "@/service/firebase/firebaseconfig.js";
 import { doc, updateDoc } from "firebase/firestore";
 import { auth, db } from "@/service/firebase/firebaseconfig";
 import { useRouter } from "expo-router";
-import { StatusBar } from "expo-status-bar";
 import * as Sharing from "expo-sharing";
 
 const SettingsItem = ({
@@ -165,7 +164,6 @@ const profile = () => {
 
   return (
     <SafeAreaView className="h-full bg-white">
-      <StatusBar backgroundColor="#003333" />
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerClassName="pb-32 px-7 pt-10"

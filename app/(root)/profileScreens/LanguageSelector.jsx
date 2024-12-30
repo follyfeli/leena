@@ -10,11 +10,12 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useLanguage } from "@/i18n";
+import { useRouter } from "expo-router";
 
 const LanguageSelector = () => {
   const { currentLanguage, changeLanguage, t } = useLanguage();
   const [selectedAnim] = React.useState(new Animated.Value(0));
-
+  const router = useRouter();
   const languages = [
     { code: "en", name: t("english"), icon: "language-outline" },
     { code: "fr", name: t("french"), icon: "language-outline" },
@@ -173,11 +174,7 @@ const styles = StyleSheet.create({
     height: 20,
   },
   navigationHeader: {
-    borderBottomWidth: 1,
-
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 8,
+    marginBottom: 30,
   },
   backButton: {
     alignItems: "center",
@@ -187,6 +184,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderBottomColor: "#003333",
     backgroundColor: "#003333",
+    borderRadius: 20,
   },
   backIcon: {
     color: "#FFA500",

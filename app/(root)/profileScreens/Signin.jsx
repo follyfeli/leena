@@ -12,7 +12,6 @@ import {
   Alert,
   ActivityIndicator,
 } from "react-native";
-import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
 import {
   createUserWithEmailAndPassword,
@@ -337,7 +336,6 @@ const Signin = () => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
     >
-      <StatusBar style="dark" />
       <Animated.View
         style={[
           styles.animatedContainer,
