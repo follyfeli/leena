@@ -22,6 +22,8 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { MotiView, AnimatePresence } from "moti";
 import QuestionComponent from "@/components/QuestionComponent";
 import { StatusBar } from "expo-status-bar";
+import RenderSettings from "@/components/RenderSettings";
+
 import styles from "../../screens/QuizcreationScreen/styles";
 import {
   QUIZ_CATEGORIES,
@@ -224,7 +226,8 @@ const QuizcreationScreen = ({ navigation }) => {
       </View>
     </MotiView>
   );
-  const renderSettings = () => (
+
+  /* const renderSettings = () => (
     <MotiView
       from={{ opacity: 0, translateX: -50 }}
       animate={{ opacity: 1, translateX: 0 }}
@@ -400,7 +403,7 @@ const QuizcreationScreen = ({ navigation }) => {
       </View>
     </MotiView>
   );
-
+ */
   const validateCurrentStep = () => {
     switch (currentStep) {
       case 1:
@@ -923,13 +926,28 @@ const QuizcreationScreen = ({ navigation }) => {
 
       <ScrollView style={styles.content}>
         <AnimatePresence>
-          {currentStep === 1 && renderBasicInfo()}
+          {/*  {currentStep === 1 && renderBasicInfo()}
           {currentStep === 2 && renderTargetingInfo()}
-          {currentStep === 3 && renderQuestions()}
+          {currentStep === 3 &&
+            renderQuestions({
+              quizState,
+              setQuizState,
+              dropdownStates,
+              setDropdownStates,
+            })} */}
+          {/*   {currentStep === 3 && renderQuestions()} */}
           {/* {currentStep === 4 && (
             <PricingSection quizState={quizState} setQuizState={setQuizState} />
           )} */}
-          {currentStep === 4 && renderSettings()}
+          {/*   {currentStep === 4 && RenderSettings()} */}
+          {currentStep === 1 && (
+            <RenderSettings
+              quizState={quizState}
+              setQuizState={setQuizState}
+              dropdownStates={dropdownStates}
+              setDropdownStates={setDropdownStates}
+            />
+          )}
         </AnimatePresence>
       </ScrollView>
 
@@ -973,271 +991,8 @@ const QuizcreationScreen = ({ navigation }) => {
           </TouchableOpacity>
         )}
       </View>
-
-      {/* Preview Button */}
-      {/* <TouchableOpacity
-        style={styles.previewButton}
-        onPress={() => setPreviewMode(!previewMode)}
-      >
-        <Ionicons
-          name={previewMode ? "eye-off" : "eye"}
-          size={24}
-          color={"#1a2151"}
-        />
-      </TouchableOpacity> */}
     </KeyboardAvoidingView>
   );
 };
 
 export default QuizcreationScreen;
-
-/* const QuizPreview = ({ quiz, onClose }) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  if (error) {
-    return (
-      <View
-        style={[previewStyles.previewContainer, previewStyles.previewError]}
-      >
-        <Text style={previewStyles.previewErrorText}>{error}</Text>
-        <TouchableOpacity
-          style={previewStyles.previewErrorButton}
-          onPress={onClose}
-        >
-          <Text style={previewStyles.previewErrorButtonText}>
-            Close Preview
-          </Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
-
-  useEffect(() => {
-    setTimeout(() => setIsLoading(false), 500);
-  }, []);
-
-  if (isLoading) {
-    return (
-      <View
-        style={[previewStyles.previewContainer, previewStyles.previewLoading]}
-      >
-        <ActivityIndicator size="large" color="#1a2151" />
-      </View>
-    );
-  }
-
-  if (!quiz.questions || quiz.questions.length === 0) {
-    return (
-      <View
-        style={[previewStyles.previewContainer, previewStyles.previewEmpty]}
-      >
-        <Text style={styles.previewEmptyText}>
-          No questions added yet. Add some questions to preview your quiz.
-        </Text>
-        <TouchableOpacity
-          style={previewStyles.previewEmptyButton}
-          onPress={onClose}
-        >
-          <Text style={previewStyles.previewEmptyButtonText}>
-            Add Questions
-          </Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
-
-  return (
-    <MotiView
-      from={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      style={previewStyles.previewContainer}
-    >
-      <ScrollView style={previewStyles.previewScroll}>
-        <View style={previewStyles.previewHeader}>
-          <Text style={previewStyles.previewTitle}>{quiz.basicInfo.title}</Text>
-          <TouchableOpacity
-            onPress={onClose}
-            style={previewStyles.previewClose}
-          >
-            <Ionicons name="close" size={24} color="#1a2151" />
-          </TouchableOpacity>
-        </View>
-
-        {quiz.basicInfo.coverImage && (
-          <Image
-            source={{ uri: quiz.basicInfo.coverImage }}
-            style={previewStyles.previewCoverImage}
-          />
-        )}
-
-        <View style={previewStyles.previewSection}>
-          <Text style={previewStyles.previewSectionTitle}>Quiz Details</Text>
-          <Text style={previewStyles.previewDescription}>
-            {quiz.basicInfo.description}
-          </Text>
-          <View style={previewStyles.previewMeta}>
-            <Text>Category: {quiz.basicInfo.category}</Text>
-            <Text>Difficulty: {quiz.basicInfo.difficulty}</Text>
-            <Text>Time Limit: {quiz.basicInfo.timeLimit} minutes</Text>
-          </View>
-        </View>
-
-        <View style={previewStyles.previewSection}>
-          <Text style={previewStyles.previewSectionTitle}>Questions</Text>
-          {quiz.questions.map((question, index) => (
-            <View key={index} style={previewStyles.previewQuestion}>
-              <Text style={previewStyles.previewQuestionText}>
-                {index + 1}. {question.question}
-              </Text>
-              {question.options.map((option, optIndex) => (
-                <View
-                  key={optIndex}
-                  style={[
-                    previewStyles.previewOption,
-                    question.correctAnswer === optIndex &&
-                      previewStyles.previewCorrectOption,
-                  ]}
-                >
-                  <Text style={previewStyles.previewOptionText}>{option}</Text>
-                </View>
-              ))}
-              {question.explanation && (
-                <Text style={previewStyles.previewExplanation}>
-                  Explanation: {question.explanation}
-                </Text>
-              )}
-            </View>
-          ))}
-        </View>
-      </ScrollView>
-    </MotiView>
-  );
-}; */
-
-// Add these styles
-/* const previewStyles = {
-  previewContainer: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: "#fff",
-    zIndex: 1000,
-  },
-  previewScroll: {
-    flex: 1,
-  },
-  previewHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: "#e5e7eb",
-  },
-  previewTitle: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#1a2151",
-  },
-  previewClose: {
-    padding: 8,
-  },
-  previewCoverImage: {
-    width: "100%",
-    height: 200,
-    resizeMode: "cover",
-  },
-  previewSection: {
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: "#e5e7eb",
-  },
-  previewSectionTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 12,
-    color: "#1a2151",
-  },
-  previewDescription: {
-    fontSize: 16,
-    color: "#4b5563",
-    marginBottom: 12,
-  },
-  previewMeta: {
-    backgroundColor: "#f3f4f6",
-    padding: 12,
-    borderRadius: 8,
-  },
-  previewQuestion: {
-    marginBottom: 24,
-    backgroundColor: "#f9fafb",
-    padding: 16,
-    borderRadius: 8,
-  },
-  previewQuestionText: {
-    fontSize: 18,
-    fontWeight: "500",
-    marginBottom: 12,
-    color: "#1f2937",
-  },
-  previewOption: {
-    padding: 12,
-    marginVertical: 4,
-    backgroundColor: "#fff",
-    borderWidth: 1,
-    borderColor: "#e5e7eb",
-    borderRadius: 6,
-  },
-  previewCorrectOption: {
-    borderColor: "#10b981",
-    backgroundColor: "#d1fae5",
-  },
-  previewOptionText: {
-    fontSize: 16,
-    color: "#374151",
-  },
-  previewExplanation: {
-    marginTop: 12,
-    padding: 12,
-    backgroundColor: "#fff",
-    borderLeftWidth: 4,
-    borderLeftColor: "#60a5fa",
-    fontStyle: "italic",
-  },
-}; */
-
-// Add these to your existing styles
-const additionalStyles = {
-  previewButton: {
-    position: "absolute",
-    right: 16,
-    bottom: 80,
-    backgroundColor: "#fff",
-    padding: 12,
-    borderRadius: 24,
-    flexDirection: "row",
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  previewButtonActive: {
-    backgroundColor: "#1a2151",
-  },
-  previewButtonText: {
-    marginLeft: 8,
-    color: "#1a2151",
-    fontWeight: "500",
-  },
-  previewButtonTextActive: {
-    color: "#fff",
-  },
-};

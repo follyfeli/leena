@@ -103,7 +103,6 @@ const QuestionComponent = ({
         numberOfLines={3}
       />
 
-      {/* Background Image Section */}
       <View style={styles.imageSection}>
         <TouchableOpacity
           style={styles.imageUploadButton}
