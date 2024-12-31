@@ -1,4 +1,403 @@
 import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+  Dimensions,
+  Platform,
+} from "react-native";
+import { router, useLocalSearchParams } from "expo-router";
+import {
+  doc,
+  getDoc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
+} from "firebase/firestore";
+import { db } from "@/service/firebase/firebaseconfig";
+import { useAuth } from "@/context/authContext";
+import icons from "@/constants/icons";
+import images from "@/constants/images";
+import { useEffect, useState } from "react";
+
+const Property = () => {
+  const { id } = useLocalSearchParams();
+  console.log("quizz id ", id);
+  const { user } = useAuth();
+  const windowHeight = Dimensions.get("window").height;
+  const [quiz, setQuiz] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [liked, setLiked] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetchQuizDetails();
+  }, [id]);
+
+  const fetchQuizDetails = async () => {
+    try {
+      setLoading(true);
+      const docRef = doc(db, "quizzes", id);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        const quizData = { $id: docSnap.id, ...docSnap.data() };
+        setQuiz(quizData);
+        setLiked(quizData.likes?.includes(user?.uid));
+
+        // Update view count
+        await updateDoc(docRef, {
+          views: (quizData.views || 0) + 1,
+        });
+      } else {
+        setError("Quiz not found");
+      }
+    } catch (err) {
+      setError("Error loading quiz");
+      console.error("Error fetching quiz:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLike = async () => {
+    if (!user) {
+      router.push("/auth/login");
+      return;
+    }
+
+    try {
+      const docRef = doc(db, "quizzes", id);
+      await updateDoc(docRef, {
+        likes: liked ? arrayRemove(user.uid) : arrayUnion(user.uid),
+      });
+      setLiked(!liked);
+    } catch (err) {
+      console.error("Error updating likes:", err);
+    }
+  };
+
+  const handleShare = () => {
+    // Implement share functionality
+  };
+
+  if (loading) {
+    return (
+      <View className="flex-1 justify-center items-center bg-white">
+        <ActivityIndicator size="large" color="#003333" />
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View className="flex-1 justify-center items-center bg-white px-5">
+        <Text className="text-xl font-rubik-bold text-black-300 text-center">
+          {error}
+        </Text>
+        <TouchableOpacity
+          onPress={() => router.back()}
+          className="mt-4 bg-primary-300 px-6 py-3 rounded-full"
+        >
+          <Text className="text-white font-rubik-bold">Go Back</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  return (
+    <View className="flex-1 bg-white">
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerClassName="pb-32"
+      >
+        <View className="relative w-full" style={{ height: windowHeight / 2 }}>
+          <Image
+            source={{ uri: quiz?.coverImage || images.defaultQuizCover }}
+            className="size-full"
+            resizeMode="cover"
+          />
+          <Image
+            source={images.whiteGradient}
+            className="absolute top-0 w-full z-40"
+          />
+
+          <View
+            className="z-50 absolute inset-x-7"
+            style={{
+              top: Platform.OS === "ios" ? 70 : 20,
+            }}
+          >
+            <View className="flex flex-row items-center w-full justify-between">
+              <TouchableOpacity
+                onPress={() => router.back()}
+                className="flex flex-row bg-primary-200 rounded-full size-11 items-center justify-center"
+              >
+                <Image source={icons.backArrow} className="size-5" />
+              </TouchableOpacity>
+
+              <View className="flex flex-row items-center gap-3">
+                <TouchableOpacity
+                  onPress={handleLike}
+                  className="bg-white/90 rounded-full p-2"
+                >
+                  <Image
+                    source={icons.heart}
+                    className="size-6"
+                    tintColor={liked ? "#ff4b4b" : "#191D31"}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={handleShare}
+                  className="bg-white/90 rounded-full p-2"
+                >
+                  <Image source={icons.share} className="size-6" />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </View>
+
+        <View className="px-5 mt-7 flex gap-2">
+          <View className="flex-row justify-between items-center">
+            <Text className="text-2xl font-rubik-extrabold flex-1">
+              {quiz?.basicInfo.title}
+            </Text>
+            <View className="bg-primary-100 rounded-full px-3 py-1">
+              <Text className="text-xs font-rubik-bold text-primary-300">
+                {quiz?.questions?.length || 0} Questions
+              </Text>
+            </View>
+          </View>
+
+          <View className="flex flex-row items-center gap-3 flex-wrap">
+            <View className="flex flex-row items-center px-4 py-2 bg-primary-100 rounded-full">
+              <Text className="text-xs font-rubik-bold text-primary-300">
+                {quiz?.basicInfo.category}
+              </Text>
+            </View>
+
+            <View className="flex flex-row items-center px-4 py-2 bg-primary-100 rounded-full">
+              <Text className="text-xs font-rubik-bold text-primary-300">
+                {quiz?.basicInfo.difficulty}
+              </Text>
+            </View>
+
+            {quiz?.basicInfo.subCategory && (
+              <View className="flex flex-row items-center px-4 py-2 bg-primary-100 rounded-full">
+                <Text className="text-xs font-rubik-bold text-primary-300">
+                  {quiz?.basicInfo.subCategory}
+                </Text>
+              </View>
+            )}
+          </View>
+
+          <View className="flex flex-row items-center justify-between mt-5 flex-wrap gap-4">
+            <View className="flex flex-row items-center">
+              <View className="flex flex-row items-center justify-center bg-primary-100 rounded-full size-10">
+                <Image source={icons.clock} className="size-4" />
+              </View>
+              <Text className="text-black-300 text-sm font-rubik-medium ml-2">
+                {Math.floor(quiz?.basicInfo.timeLimit / 60)} minutes
+              </Text>
+            </View>
+
+            <View className="flex flex-row items-center">
+              <View className="flex flex-row items-center justify-center bg-primary-100 rounded-full size-10">
+                <Image source={icons.star} className="size-4" />
+              </View>
+              <Text className="text-black-300 text-sm font-rubik-medium ml-2">
+                {quiz?.settings.passingScore}% to pass
+              </Text>
+            </View>
+
+            {quiz?.settings.allowRetake && (
+              <View className="flex flex-row items-center">
+                <View className="flex flex-row items-center justify-center bg-primary-100 rounded-full size-10">
+                  <Image source={icons.refresh} className="size-4" />
+                </View>
+                <Text className="text-black-300 text-sm font-rubik-medium ml-2">
+                  Retakes Allowed
+                </Text>
+              </View>
+            )}
+          </View>
+
+          <View className="w-full border-t border-primary-200 pt-7 mt-5">
+            <Text className="text-black-300 text-xl font-rubik-bold">
+              Engagement
+            </Text>
+
+            <View className="flex flex-row items-center justify-between mt-4">
+              <View className="flex flex-row items-center gap-5">
+                <View className="flex flex-row items-center">
+                  <Image source={icons.eye} className="size-5" />
+                  <Text className="text-black-200 ml-2">
+                    {quiz?.views || 0}
+                  </Text>
+                </View>
+                <View className="flex flex-row items-center">
+                  <Image source={icons.heart} className="size-5" />
+                  <Text className="text-black-200 ml-2">
+                    {quiz?.likes?.length || 0}
+                  </Text>
+                </View>
+                <View className="flex flex-row items-center">
+                  <Image source={icons.comment} className="size-5" />
+                  <Text className="text-black-200 ml-2">
+                    {quiz?.comments?.length || 0}
+                  </Text>
+                </View>
+                <View className="flex flex-row items-center">
+                  <Image source={icons.share} className="size-5" />
+                  <Text className="text-black-200 ml-2">
+                    {quiz?.shares || 0}
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </View>
+
+          {quiz?.basicInfo.description && (
+            <View className="mt-7">
+              <Text className="text-black-300 text-xl font-rubik-bold">
+                Description
+              </Text>
+              <Text className="text-black-200 text-base font-rubik mt-2">
+                {quiz?.basicInfo.description}
+              </Text>
+            </View>
+          )}
+
+          {quiz?.targetingInfo.audience && (
+            <View className="mt-7">
+              <Text className="text-black-300 text-xl font-rubik-bold">
+                Target Audience
+              </Text>
+              <Text className="text-black-200 text-base font-rubik mt-2">
+                {quiz?.targetingInfo.audience}
+              </Text>
+            </View>
+          )}
+
+          {quiz?.targetingInfo.businessGoal && (
+            <View className="mt-7">
+              <Text className="text-black-300 text-xl font-rubik-bold">
+                Business Goal
+              </Text>
+              <Text className="text-black-200 text-base font-rubik mt-2">
+                {quiz?.targetingInfo.businessGoal}
+              </Text>
+            </View>
+          )}
+
+          {quiz?.targetingInfo.learningObjectives?.length > 0 && (
+            <View className="mt-7">
+              <Text className="text-black-300 text-xl font-rubik-bold">
+                Learning Objectives
+              </Text>
+              {quiz?.targetingInfo.learningObjectives?.map(
+                (objective, index) => (
+                  <View key={index} className="flex flex-row items-start mt-3">
+                    <View className="size-2 rounded-full bg-primary-300 mr-3 mt-2" />
+                    <Text className="text-black-200 text-base font-rubik flex-1">
+                      {objective}
+                    </Text>
+                  </View>
+                )
+              )}
+            </View>
+          )}
+
+          {quiz?.targetingInfo.prerequisites?.length > 0 && (
+            <View className="mt-7">
+              <Text className="text-black-300 text-xl font-rubik-bold">
+                Prerequisites
+              </Text>
+              {quiz?.targetingInfo.prerequisites?.map((prerequisite, index) => (
+                <View key={index} className="flex flex-row items-start mt-3">
+                  <View className="size-2 rounded-full bg-primary-300 mr-3 mt-2" />
+                  <Text className="text-black-200 text-base font-rubik flex-1">
+                    {prerequisite}
+                  </Text>
+                </View>
+              ))}
+            </View>
+          )}
+
+          <View className="mt-7">
+            <Text className="text-black-300 text-xl font-rubik-bold mb-3">
+              Quiz Settings
+            </Text>
+            <View className="flex-row flex-wrap gap-3">
+              {quiz?.settings.showTimer && (
+                <View className="bg-primary-100 rounded-full px-4 py-2">
+                  <Text className="text-xs font-rubik-bold text-primary-300">
+                    Timer Enabled
+                  </Text>
+                </View>
+              )}
+              {quiz?.settings.shuffleQuestions && (
+                <View className="bg-primary-100 rounded-full px-4 py-2">
+                  <Text className="text-xs font-rubik-bold text-primary-300">
+                    Shuffled Questions
+                  </Text>
+                </View>
+              )}
+              {quiz?.settings.showExplanations && (
+                <View className="bg-primary-100 rounded-full px-4 py-2">
+                  <Text className="text-xs font-rubik-bold text-primary-300">
+                    Shows Explanations
+                  </Text>
+                </View>
+              )}
+              {quiz?.settings.allowSkip && (
+                <View className="bg-primary-100 rounded-full px-4 py-2">
+                  <Text className="text-xs font-rubik-bold text-primary-300">
+                    Skip Questions
+                  </Text>
+                </View>
+              )}
+            </View>
+          </View>
+        </View>
+      </ScrollView>
+
+      <View className="absolute bg-white bottom-0 w-full rounded-t-2xl border-t border-r border-l border-primary-200 p-7">
+        <View className="flex flex-row items-center justify-between gap-10">
+          <View className="flex flex-col items-start">
+            <Text className="text-black-200 text-xs font-rubik-medium">
+              To Pass
+            </Text>
+            <Text
+              numberOfLines={1}
+              className="text-primary-300 text-start text-2xl font-rubik-bold"
+            >
+              {quiz?.settings.passingScore}%
+            </Text>
+          </View>
+
+          <TouchableOpacity
+            className="flex-1 flex flex-row items-center justify-center bg-primary-300 py-3 rounded-full shadow-md shadow-zinc-400"
+            onPress={() => router.push(`/quiz/play/${id}`)}
+          >
+            <Image source={icons.play} className="size-5 mr-2" />
+            <Text className="text-white text-lg text-center font-rubik-bold">
+              Start Quiz
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </View>
+  );
+};
+
+export default Property;
+
+/* import {
   FlatList,
   Image,
   ScrollView,
@@ -125,12 +524,12 @@ const Property = () => {
               </Text>
             </View>
 
-            {/*  <View className="flex flex-row items-center gap-2">
+            <View className="flex flex-row items-center gap-2">
               <Image source={icons.star} className="size-5" />
               <Text className="text-black-200 text-sm mt-1 font-rubik-medium">
                 {property?.rating} ({property?.reviews.length} reviews)
               </Text>
-            </View> */}
+            </View>
           </View>
 
           <View className="flex flex-row items-center mt-5">
@@ -196,62 +595,8 @@ const Property = () => {
             <Text className="text-black-300 text-xl font-rubik-bold">
               Facilities
             </Text>
-
-            {/*  {properties.property?.facilities.length > 0 && (
-              <View className="flex flex-row flex-wrap items-start justify-start mt-2 gap-5">
-                {property?.facilities.map((item, index) => {
-                  const facility = facilities.find(
-                    (facility) => facility.title === item
-                  );
-
-                  return (
-                    <View
-                      key={index}
-                      className="flex flex-1 flex-col items-center min-w-16 max-w-20"
-                    >
-                      <View className="size-14 bg-primary-100 rounded-full flex items-center justify-center">
-                        <Image
-                          source={facility ? facility.icon : icons.info}
-                          className="size-6"
-                        />
-                      </View>
-
-                      <Text
-                        numberOfLines={1}
-                        ellipsizeMode="tail"
-                        className="text-black-300 text-sm text-center font-rubik mt-1.5"
-                      >
-                        {item}
-                      </Text>
-                    </View>
-                  );
-                })}
-              </View>
-            )} */}
           </View>
 
-          {/*    {properties.property?.gallery.length > 0 && (
-            <View className="mt-7">
-              <Text className="text-black-300 text-xl font-rubik-bold">
-                Gallery
-              </Text>
-              <FlatList
-                contentContainerStyle={{ paddingRight: 20 }}
-                data={property?.gallery}
-                keyExtractor={(item) => item.$id}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                renderItem={({ item }) => (
-                  <Image
-                    source={{ uri: item.image }}
-                    className="size-40 rounded-xl"
-                  />
-                )}
-                contentContainerClassName="flex gap-4 mt-3"
-              />
-            </View>
-          )}
- */}
           <View className="mt-7">
             <Text className="text-black-300 text-xl font-rubik-bold">
               Location
@@ -268,29 +613,6 @@ const Property = () => {
               className="h-52 w-full mt-5 rounded-xl"
             />
           </View>
-
-          {/*  {property?.reviews.length > 0 && (
-            <View className="mt-7">
-              <View className="flex flex-row items-center justify-between">
-                <View className="flex flex-row items-center">
-                  <Image source={icons.star} className="size-6" />
-                  <Text className="text-black-300 text-xl font-rubik-bold ml-2">
-                    {property?.rating} ({property?.reviews.length} reviews)
-                  </Text>
-                </View>
-
-                <TouchableOpacity>
-                  <Text className="text-primary-300 text-base font-rubik-bold">
-                    View All
-                  </Text>
-                </TouchableOpacity>
-              </View>
-
-              <View className="mt-5">
-                <Comment item={property?.reviews[0]} />
-              </View>
-            </View>
-          )} */}
         </View>
       </ScrollView>
 
@@ -320,3 +642,4 @@ const Property = () => {
 };
 
 export default Property;
+ */

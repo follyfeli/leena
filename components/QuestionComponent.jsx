@@ -17,11 +17,10 @@ import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import DropDownPicker from "react-native-dropdown-picker";
 import { MotiView, AnimatePresence } from "moti";
-import { QUIZ_TYPES } from "@/components/QuizConstance";
 import { COLORS, FONTS } from "../app/screens/QuizcreationScreen/styles";
 import { db } from "@/service/firebase/firebaseconfig";
 import { collection, getDocs } from "firebase/firestore";
-
+import { useLanguage } from "@/i18n";
 const MAX_QUESTION_LENGTH = 500;
 const MAX_OPTION_LENGTH = 200;
 const MAX_EXPLANATION_LENGTH = 1000;
@@ -42,7 +41,7 @@ const QuestionComponent = ({
   const [errors, setErrors] = useState({});
   const [backgroundImages, setBackgroundImages] = useState([]);
   const [loadingImages, setLoadingImages] = useState(true);
-
+  const { t } = useLanguage();
   const handleAddQuestion = useCallback(async () => {
     Keyboard.dismiss();
     if (validateQuestion()) {
@@ -329,6 +328,13 @@ const QuestionComponent = ({
       Alert.alert("Error", "Failed to pick image. Please try again.");
     }
   };
+
+  const QUIZ_TYPES = [
+    { id: "multiple-choice", name: t("quizTypeMultipleChoice"), icon: "☑️" },
+    { id: "true-false", name: t("quizTypeTrueFalse"), icon: "⚖️" },
+
+    { id: "essay", name: t("quizTypeEssay"), icon: "📜" },
+  ];
 
   const renderImageSection = () => (
     <View style={styles.imageSection}>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, TouchableOpacity, Image, TextInput } from "react-native";
 import { useDebouncedCallback } from "use-debounce";
-
+import { useLanguage } from "@/i18n";
 import icons from "@/constants/icons";
 import { useLocalSearchParams, router, usePathname } from "expo-router";
 
@@ -9,7 +9,7 @@ const Search = () => {
   const path = usePathname();
   const params = useLocalSearchParams();
   const [search, setSearch] = useState(params.query);
-
+  const { t } = useLanguage();
   const debouncedSearch = useDebouncedCallback((text) => {
     router.setParams({ query: text });
   }, 500);
@@ -26,7 +26,7 @@ const Search = () => {
         <TextInput
           value={search}
           onChangeText={handleSearch}
-          placeholder="Search for anything"
+          placeholder={t("searchplaceholder")}
           className="text-sm font-rubik text-black-300 ml-2 flex-1"
         />
       </View>

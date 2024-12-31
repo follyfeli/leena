@@ -10,7 +10,7 @@ import {
   Platform,
   KeyboardAvoidingView,
 } from "react-native";
-import { addDoc } from "firebase/firestore";
+import { addDoc, updateDoc, doc, collection } from "firebase/firestore";
 import { db } from "@/service/firebase/firebaseconfig";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
@@ -19,26 +19,162 @@ import { MotiView, AnimatePresence } from "moti";
 import QuestionComponent from "@/components/QuestionComponent";
 import { StatusBar } from "expo-status-bar";
 import RenderSettings from "@/components/RenderSettings";
-
 import styles from "../../screens/QuizcreationScreen/styles";
-import {
-  QUIZ_CATEGORIES,
-  DIFFICULTY_LEVELS,
-  TIME_LIMITS,
-  SCORING_SETTINGS,
-} from "@/components/QuizConstance";
 import { saveQuizWithImages } from "@/components/imageUploadUtils";
 import { useRouter } from "expo-router";
+import { useAuth } from "@/context/authContext";
+import { useLanguage } from "@/i18n";
 
 const QuizcreationScreen = ({ navigation }) => {
   const router = useRouter();
   // Step tracking
+  const { t } = useLanguage();
   const [currentStep, setCurrentStep] = useState(1);
   const [coverImage, setCoverImage] = useState(null);
   const totalSteps = 4;
   const [isSaving, setIsSaving] = useState(false);
+  const { user } = useAuth();
+  const userId = user?.uid;
+
   const handleBack = () => {
     router.push("/profile");
+  };
+
+  const QUIZ_CATEGORIES = [
+    {
+      id: "education",
+      name: t("quizCategoryEducation"),
+      icon: "📚",
+    },
+    { id: "mathematics", name: t("quizCategoryMathematics"), icon: "🔢" },
+    { id: "science", name: t("quizCategoryScience"), icon: "🧬" },
+    { id: "literature", name: t("quizCategoryLiterature"), icon: "📖" },
+    { id: "history", name: t("quizCategoryHistory"), icon: "🏛️" },
+    { id: "geography", name: t("quizCategoryGeography"), icon: "🌍" },
+    { id: "languages", name: t("quizCategoryLanguages"), icon: "🗣️" },
+    {
+      id: "professional",
+      name: t("quizCategoryProfessional"),
+      icon: "💼",
+    },
+    {
+      id: "business-skills",
+      name: t("quizCategoryBusinessSkills"),
+      icon: "📊",
+    },
+    { id: "technology", name: t("quizCategoryTechnology"), icon: "💻" },
+    { id: "leadership", name: t("quizCategoryLeadership"), icon: "👥" },
+    { id: "marketing", name: t("quizCategoryMarketing"), icon: "📱" },
+    { id: "finance", name: t("quizCategoryFinance"), icon: "💰" },
+    { id: "hr", name: t("quizCategoryHR"), icon: "🤝" },
+    {
+      id: "entertainment",
+      name: t("quizCategoryEntertainment"),
+      icon: "🎮",
+    },
+    { id: "movies", name: t("quizCategoryMovies"), icon: "🎬" },
+    { id: "music", name: t("quizCategoryMusic"), icon: "🎵" },
+    { id: "sports", name: t("quizCategorySports"), icon: "⚽" },
+    { id: "gaming", name: t("quizCategoryGaming"), icon: "🎮" },
+    { id: "pop-culture", name: t("quizCategoryPopCulture"), icon: "🌟" },
+    {
+      id: "business-marketing",
+      name: t("quizCategoryBusinessMarketing"),
+      icon: "💡",
+    },
+    {
+      id: "market-research",
+      name: t("quizCategoryMarketResearch"),
+      icon: "📊",
+    },
+    {
+      id: "customer-feedback",
+      name: t("quizCategoryCustomerFeedback"),
+      icon: "📝",
+    },
+    {
+      id: "product-knowledge",
+      name: t("quizCategoryProductKnowledge"),
+      icon: "📦",
+    },
+    { id: "sales-training", name: t("quizCategorySalesTraining"), icon: "💰" },
+    {
+      id: "personal-dev",
+      name: t("quizCategoryPersonalDev"),
+      icon: "🌱",
+    },
+    {
+      id: "self-improvement",
+      name: t("quizCategorySelfImprovement"),
+      icon: "🎯",
+    },
+    {
+      id: "health-wellness",
+      name: t("quizCategoryHealthWellness"),
+      icon: "🧘‍♀️",
+    },
+    { id: "productivity", name: t("quizCategoryProductivity"), icon: "⚡" },
+    { id: "hobbies", name: "Hobbies 🎨", icon: "🎨" },
+    {
+      id: "corporate",
+      name: t("quizCategoryCorporate"),
+      icon: "🏢",
+    },
+    { id: "compliance", name: t("quizCategoryCompliance"), icon: "📋" },
+    { id: "safety", name: t("quizCategorySafety"), icon: "🦺" },
+    { id: "onboarding", name: t("quizCategoryOnboarding"), icon: "🚀" },
+    { id: "team-building", name: t("quizCategoryTeamBuilding"), icon: "🤝" },
+    {
+      id: "certification",
+      name: t("quizCategoryCertification"),
+      icon: "📜",
+    },
+    { id: "it-cert", name: t("quizCategoryITCert"), icon: "💻" },
+    {
+      id: "professional-cert",
+      name: t("quizCategoryProfessionalCert"),
+      icon: "📚",
+    },
+    { id: "industry-cert", name: t("quizCategoryIndustryCert"), icon: "🏭" },
+
+    { id: "vocabulary", name: t("quizCategoryVocabulary"), icon: "📖" },
+    { id: "grammar", name: t("quizCategoryGrammar"), icon: "✏️" },
+    { id: "conversation", name: t("quizCategoryConversation"), icon: "💬" },
+    {
+      id: "business-language",
+      name: t("quizCategoryBusinessLanguage"),
+      icon: "💼",
+    },
+  ];
+
+  const DIFFICULTY_LEVELS = [
+    { id: "beginner", name: t("difficultyBeginner"), color: "#4CAF50" },
+    { id: "intermediate", name: t("difficultyIntermediate"), color: "#2196F3" },
+    { id: "advanced", name: t("difficultyAdvanced"), color: "#FF6B6B" },
+    { id: "expert", name: t("difficultyExpert"), color: "#9C27B0" },
+  ];
+
+  const TIME_LIMITS = [
+    { id: "no-limit", name: t("timeLimitNoLimit"), duration: 0 },
+    { id: "quick", name: t("timeLimitQuick"), duration: 300 },
+    { id: "standard", name: t("timeLimitStandard"), duration: 900 },
+    { id: "extended", name: t("timeLimitExtended"), duration: 1800 },
+    { id: "comprehensive", name: t("timeLimitComprehensive"), duration: 3600 },
+  ];
+
+  const SCORING_SETTINGS = {
+    defaultPointsPerQuestion: 10,
+    passingScore: 70,
+    bonusPoints: {
+      speedBonus: 5,
+      perfectScore: 20,
+      streakBonus: 2,
+    },
+    penalties: {
+      incorrectAttempt: -2,
+      timeOverrun: -5,
+      hintUsed: -1,
+    },
   };
 
   // Enhanced state management
@@ -73,13 +209,10 @@ const QuizcreationScreen = ({ navigation }) => {
       requireEvidence: false,
       password: "",
     },
-    /*  pricing: {
-      enabled: false,
-      price: "",
-      description: "",
-      features: [],
-      imageUrl: null,
-    }, */
+    likes: 0,
+    shares: 0,
+    views: 0,
+    comments: 0,
   });
 
   // Dropdown states
@@ -525,6 +658,13 @@ const QuizcreationScreen = ({ navigation }) => {
     setIsSaving(true);
 
     try {
+      // Get current user ID
+
+      if (!userId) {
+        Alert.alert("Error", "You must be logged in to create a quiz");
+        return;
+      }
+
       // Validate basic info
       if (!quizState.basicInfo.title?.trim() || !quizState.basicInfo.category) {
         Alert.alert("Error", "Please fill in the quiz title and category");
@@ -550,7 +690,6 @@ const QuizcreationScreen = ({ navigation }) => {
           return;
         }
 
-        // Optionally add minimum password length validation
         if (quizState.settings.password.length < 6) {
           Alert.alert("Error", "Password must be at least 6 characters long");
           return;
@@ -570,20 +709,34 @@ const QuizcreationScreen = ({ navigation }) => {
         return;
       }
 
+      // Get quiz data with images
       const quizData = await saveQuizWithImages(quizState, coverImage);
 
+      // Add creator information and timestamps
+      const enhancedQuizData = {
+        ...quizData,
+        createdBy: userId,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+
       // Add to Firestore
-      const docRef = await addDoc(collection(db, "quizzes"), quizData);
+      const docRef = await addDoc(collection(db, "quizzes"), enhancedQuizData);
+
+      // Update the document with its own ID
+      await updateDoc(doc(db, "quizzes", docRef.id), {
+        quizId: docRef.id,
+      });
 
       Alert.alert("Success", "Quiz created successfully!");
       router.push("/profile");
     } catch (error) {
+      console.error("Error saving quiz:", error);
       Alert.alert("Error", "Failed to save quiz: " + error.message);
     } finally {
       setIsSaving(false);
     }
   };
-
   const renderStepIndicator = () => (
     <MotiView style={styles.stepIndicator}>
       {[...Array(totalSteps)].map((_, index) => (

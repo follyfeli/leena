@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
-import {
-  ActivityIndicator,
-  FlatList,
-  Image,
-  Text,
-  TouchableOpacity,
-  View,
-  StyleSheet,
-} from "react-native";
+import { ActivityIndicator, FlatList, Image, Text, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
+import {
+  collection,
+  query,
+  orderBy,
+  limit,
+  where,
+  getDocs,
+} from "firebase/firestore";
+import { db } from "@/service/firebase/firebaseconfig";
 import icons from "@/constants/icons";
 import Search from "@/components/Search";
 import Filters from "@/components/Filters";
@@ -22,64 +23,73 @@ import { useLanguage } from "@/i18n";
 const Home = () => {
   const { isAuthenticated, user } = useAuth();
   const { t } = useLanguage();
-  console.log(user);
   const params = useLocalSearchParams();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [featuredQuizzes, setFeaturedQuizzes] = useState([]);
+  const [quizzes, setQuizzes] = useState([]);
 
-  const properties = {
-    user: {
-      name: "John Doe",
-      avatar: avatar,
-    },
-    properties: [
-      {
-        $id: "1",
-        name: "Luxury Villa",
-        address: "123 Palm Street, Beverly Hills",
-        price: "2,500",
-        rating: "4.8",
-        image:
-          "https://images.unsplash.com/photo-1613977257363-707ba9348227?w=500&q=80",
-      },
-      {
-        $id: "2",
-        name: "Modern Apartment",
-        address: "456 Downtown Ave, Los Angeles",
-        price: "1,800",
-        rating: "4.6",
-        image:
-          "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=500&q=80",
-      },
-      {
-        $id: "3",
-        name: "Seaside Condo",
-        address: "789 Ocean Drive, Malibu",
-        price: "3,200",
-        rating: "4.9",
-        image:
-          "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=500&q=80",
-      },
-      {
-        $id: "4",
-        name: "Mountain Retreat",
-        address: "321 Highland Road, Hollywood Hills",
-        price: "4,100",
-        rating: "4.7",
-        image:
-          "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=500&q=80",
-      },
-    ],
+  /*  useEffect(() => {
+    fetchQuizzes();
+    console.log("les quizzes:", quizzes);
+    console.log("les quizzes:", quizzes.quizId);
+  }, [params.filter, quizzes.length]); */
+
+  const fetchQuizzes = async () => {
+    try {
+      setLoading(true);
+
+      // Fetch all quizzes and calculate engagement
+      const allQuizzesQuery = query(collection(db, "quizzes"));
+      const allQuizzesSnapshot = await getDocs(allQuizzesQuery);
+
+      // Map and calculate engagement for each quiz
+      const allQuizzesWithEngagement = allQuizzesSnapshot.docs.map((doc) => {
+        const data = doc.data();
+        // Calculate engagement based on likes and comments length
+        // If these arrays don't exist, default to empty arrays
+        const likesCount = data.likes?.length || 0;
+        const commentsCount = data.comments?.length || 0;
+        const totalEngagement = likesCount + commentsCount;
+
+        return {
+          $id: doc.id,
+          ...data,
+          totalEngagement,
+        };
+      });
+
+      // Sort by engagement and get top 5 for featured
+      const sortedQuizzes = [...allQuizzesWithEngagement].sort(
+        (a, b) => b.totalEngagement - a.totalEngagement
+      );
+      setFeaturedQuizzes(sortedQuizzes.slice(0, 5));
+
+      // Handle filtering
+      if (params.filter && params.filter !== "All") {
+        const filtered = allQuizzesWithEngagement.filter(
+          (quiz) => quiz.category === params.filter
+        );
+        setQuizzes(filtered);
+      } else {
+        setQuizzes(allQuizzesWithEngagement);
+      }
+    } catch (error) {
+      console.error("Error fetching quizzes:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleCardPress = (id) => router.push(`/detailscatalogue/${id}`);
+  const handleCardPress = () =>
+    router.push(`/detailscatalogue/${quizzes.quizId}`);
 
   return (
     <SafeAreaView className="h-full bg-white">
       <FlatList
-        data={properties.properties}
+        data={quizzes}
         numColumns={2}
         renderItem={({ item }) => (
-          <Card item={item} onPress={() => handleCardPress(item.$id)} />
+          <Card item={item} onPress={() => handleCardPress(quizzes.quizId)} />
         )}
         keyExtractor={(item) => item.$id}
         contentContainerClassName="pb-32"
@@ -96,17 +106,13 @@ const Home = () => {
           <View className="px-5">
             <View className="flex flex-row items-center justify-between mt-5">
               <View className="flex flex-row">
-                <Image
-                  source={properties.user.avatar}
-                  className="size-12 rounded-full"
-                />
-
+                <Image source={avatar} className="size-12 rounded-full" />
                 <View className="flex flex-col items-start ml-2 justify-center">
                   <Text className="text-xs font-rubik text-black-100">
                     {t("homemorning")}
                   </Text>
                   <Text className="text-base font-rubik-medium text-[#003333]">
-                    {user?.name}
+                    {user?.name ?? ""}
                   </Text>
                 </View>
               </View>
@@ -118,17 +124,16 @@ const Home = () => {
             <View className="my-5">
               <View className="flex flex-row items-center justify-between">
                 <Text className="text-xl font-rubik-bold text-[#003333]">
-                  Featured
+                  {t("homefeaturedquiz")}
                 </Text>
-                <View></View>
               </View>
 
               <FlatList
-                data={properties.properties}
+                data={featuredQuizzes}
                 renderItem={({ item }) => (
                   <FeaturedCard
                     item={item}
-                    onPress={() => handleCardPress(item.$id)}
+                    onPress={() => handleCardPress(featuredQuizzes.quizId)}
                   />
                 )}
                 keyExtractor={(item) => item.$id}
@@ -138,14 +143,11 @@ const Home = () => {
               />
             </View>
 
-            {/* <Button title="seed" onPress={seed} /> */}
-
             <View className="mt-5">
               <View className="flex flex-row items-center justify-between">
                 <Text className="text-xl font-rubik-bold text-[#003333]">
-                  Our Recommendation
+                  {t("homeallquizzes")}
                 </Text>
-                <View></View>
               </View>
 
               <Filters />
@@ -158,5 +160,3 @@ const Home = () => {
 };
 
 export default Home;
-
-const styles = StyleSheet.create({});
