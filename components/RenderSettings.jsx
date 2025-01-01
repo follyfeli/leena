@@ -14,6 +14,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { MotiView } from "moti";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { COLORS, FONTS } from "../app/screens/QuizcreationScreen/styles";
+import { useLanguage } from "@/i18n";
 const RenderSettings = ({
   quizState,
   setQuizState,
@@ -22,7 +23,7 @@ const RenderSettings = ({
 }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [dateType, setDateType] = useState(null);
-
+  const { t } = useLanguage();
   const handleDateChange = (event, selectedDate) => {
     setShowDatePicker(Platform.OS === "ios");
 
@@ -75,15 +76,19 @@ const RenderSettings = ({
         {/* Basic Settings */}
         <View style={styles.sectionHeader}>
           <Ionicons name="settings" size={24} style={styles.sectionIcon} />
-          <Text style={styles.sectionTitle}>Quiz Settings</Text>
+          <Text style={styles.sectionTitle}>{t("quizSettingsTitle")} </Text>
         </View>
 
         {/* Question Behavior */}
         <View style={styles.subsection}>
-          <Text style={styles.subsectionTitle}>Question Behavior</Text>
+          <Text style={styles.subsectionTitle}>
+            {t("quizSettingBehaviortitle")}{" "}
+          </Text>
           <View style={styles.settingsGrid}>
             <View style={styles.settingItem}>
-              <Text style={styles.settingLabel}>Shuffle Questions</Text>
+              <Text style={styles.settingLabel}>
+                {t("creationquestionshudule")}{" "}
+              </Text>
               <Switch
                 value={quizState.settings.shuffleQuestions}
                 onValueChange={(value) =>
@@ -103,7 +108,9 @@ const RenderSettings = ({
             </View>
 
             <View style={styles.settingItem}>
-              <Text style={styles.settingLabel}>Shuffle Answers</Text>
+              <Text style={styles.settingLabel}>
+                {t("creationanswershudule")}{" "}
+              </Text>
               <Switch
                 value={quizState.settings.shuffleAnswers}
                 onValueChange={(value) =>
@@ -120,7 +127,9 @@ const RenderSettings = ({
             </View>
 
             <View style={styles.settingItem}>
-              <Text style={styles.settingLabel}>Show Explanations</Text>
+              <Text style={styles.settingLabel}>
+                {t("creationshowexplain")}{" "}
+              </Text>
               <Switch
                 value={quizState.settings.showExplanations}
                 onValueChange={(value) =>
@@ -140,7 +149,9 @@ const RenderSettings = ({
             </View>
 
             <View style={styles.settingItem}>
-              <Text style={styles.settingLabel}>Allow Retake</Text>
+              <Text style={styles.settingLabel}>
+                {t("creationallowretake")}{" "}
+              </Text>
               <Switch
                 value={quizState.settings.allowRetake}
                 onValueChange={(value) =>
@@ -158,7 +169,9 @@ const RenderSettings = ({
 
             {quizState.settings.allowRetake && (
               <View style={styles.settingSubItem}>
-                <Text style={styles.settingLabel}>Max Retake Attempts</Text>
+                <Text style={styles.settingLabel}>
+                  {t("creationmaxretake")}
+                </Text>
                 <TextInput
                   style={[
                     styles.input,
@@ -182,7 +195,7 @@ const RenderSettings = ({
             )}
 
             <View style={styles.settingItem}>
-              <Text style={styles.settingLabel}>Show Timer</Text>
+              <Text style={styles.settingLabel}>{t("creationshowtimer")} </Text>
               <Switch
                 value={quizState.settings.showTimer}
                 onValueChange={(value) =>
@@ -199,7 +212,7 @@ const RenderSettings = ({
             </View>
 
             <View style={styles.settingItem}>
-              <Text style={styles.settingLabel}>Allow Skip</Text>
+              <Text style={styles.settingLabel}>{t("creationallowskip")} </Text>
               <Switch
                 value={quizState.settings.allowSkip}
                 onValueChange={(value) =>
@@ -219,10 +232,15 @@ const RenderSettings = ({
 
         {/* Feedback Settings */}
         <View style={styles.subsection}>
-          <Text style={styles.subsectionTitle}>Feedback Settings</Text>
+          <Text style={styles.subsectionTitle}>
+            {" "}
+            {t("feedbackSettingsTitle")}
+          </Text>
           <View style={styles.settingsGrid}>
             <View style={styles.settingItem}>
-              <Text style={styles.settingLabel}>Show Immediate Feedback</Text>
+              <Text style={styles.settingLabel}>
+                {t("creationshowimmediatefeedback")}
+              </Text>
               <Switch
                 value={quizState.settings.immediateAnswerFeedback}
                 onValueChange={(value) =>
@@ -244,7 +262,9 @@ const RenderSettings = ({
             </View>
 
             <View style={styles.settingItem}>
-              <Text style={styles.settingLabel}>Show Correct Answer</Text>
+              <Text style={styles.settingLabel}>
+                {t("creationshowcorrectanswer")}
+              </Text>
               <Switch
                 value={quizState.settings.showCorrectAnswer}
                 onValueChange={(value) =>
@@ -264,7 +284,9 @@ const RenderSettings = ({
             </View>
 
             <View style={styles.settingItem}>
-              <Text style={styles.settingLabel}>Allow Answer Review</Text>
+              <Text style={styles.settingLabel}>
+                {t("creationallowanswerreview")}
+              </Text>
               <Switch
                 value={quizState.settings.allowAnswerReview}
                 onValueChange={(value) =>
@@ -287,10 +309,12 @@ const RenderSettings = ({
 
         {/* Time Settings */}
         <View style={styles.subsection}>
-          <Text style={styles.subsectionTitle}>Time Settings</Text>
+          <Text style={styles.subsectionTitle}>{t("timeSettingsTitle")} </Text>
           <View style={styles.settingsGrid}>
             <View style={styles.settingItem}>
-              <Text style={styles.settingLabel}>Time Limit Enabled</Text>
+              <Text style={styles.settingLabel}>
+                {t("timesettingsenabled")}
+              </Text>
               <Switch
                 value={quizState.settings.timeLimitEnabled}
                 onValueChange={(value) =>
@@ -311,7 +335,7 @@ const RenderSettings = ({
 
             {quizState.settings.timeLimitEnabled && (
               <View style={styles.settingSubItem}>
-                <Text style={styles.settingLabel}>Time Limit (minutes)</Text>
+                <Text style={styles.settingLabel}>{t("timelimite")} </Text>
                 <TextInput
                   style={[
                     styles.input,
@@ -338,10 +362,14 @@ const RenderSettings = ({
 
         {/* Scoring Settings */}
         <View style={styles.scoringSection}>
-          <Text style={styles.subsectionTitle}>Scoring Settings</Text>
+          <Text style={styles.subsectionTitle}>
+            {t("scoringSettingsTitle")}{" "}
+          </Text>
           <View style={styles.settingsGrid}>
             <View style={styles.scoreInputContainer}>
-              <Text style={styles.settingLabel}>Passing Score (%)</Text>
+              <Text style={styles.settingLabel}>
+                {t("creationpassingscore")}{" "}
+              </Text>
               <TextInput
                 style={[styles.input, styles.enhancedInput, styles.scoreInput]}
                 keyboardType="numeric"
@@ -361,7 +389,9 @@ const RenderSettings = ({
             </View>
 
             <View style={styles.settingItem}>
-              <Text style={styles.settingLabel}>Negative Marking</Text>
+              <Text style={styles.settingLabel}>
+                {t("creationnegativemarking")}{" "}
+              </Text>
               <Switch
                 value={quizState.settings.negativeMarking}
                 onValueChange={(value) =>
@@ -481,14 +511,16 @@ const RenderSettings = ({
 
         {/* Access Control */}
         <View style={styles.accessSection}>
-          <Text style={styles.subsectionTitle}>Access Control</Text>
+          <Text style={styles.subsectionTitle}>
+            {t("accessControlSettingsTitle")}
+          </Text>
           <View style={{ zIndex: 1000, marginBottom: 20 }}>
             <DropDownPicker
               open={dropdownStates.accessControl}
               value={quizState.settings.accessControl}
               items={[
-                { label: "Public", value: "public" },
-                { label: "Private", value: "password" },
+                { label: t("accessControlPublic"), value: "public" },
+                { label: t("accessControlPrivate"), value: "password" },
               ]}
               setOpen={(open) =>
                 setDropdownStates({ ...dropdownStates, accessControl: open })
@@ -541,7 +573,11 @@ const RenderSettings = ({
               transition={{ type: "spring", duration: 300 }}
               style={{ marginTop: 16, width: "100%" }}
             >
-              <Text style={styles.settingLabel}>Password Protection</Text>
+              <Text
+                style={{ fontSize: 16, color: "#003333", fontWeight: "300" }}
+              >
+                {t("accescontrolpassword")}
+              </Text>
               <TextInput
                 style={[
                   styles.input,
@@ -555,7 +591,7 @@ const RenderSettings = ({
                     settings: { ...quizState.settings, password: text },
                   })
                 }
-                placeholder="Enter password for access"
+                placeholder={t("accescontrolpasswordplaceholder")}
                 secureTextEntry
                 autoCapitalize="none"
               />
@@ -564,7 +600,9 @@ const RenderSettings = ({
 
           {/* Scheduling */}
           <View style={styles.scheduleSection}>
-            <Text style={styles.subsectionTitle}>Schedule Quiz</Text>
+            <Text style={styles.subsectionTitle}>
+              {t("schedulingSettingsTitle")}
+            </Text>
             <View style={styles.datePickerContainer}>
               {/* Continuing from the Schedule Quiz section */}
               <TouchableOpacity
@@ -580,7 +618,7 @@ const RenderSettings = ({
                     ? new Date(
                         quizState.settings.startDate
                       ).toLocaleDateString()
-                    : "Set Start Date"}
+                    : t("createstartdate")}
                 </Text>
               </TouchableOpacity>
 
@@ -595,7 +633,7 @@ const RenderSettings = ({
                 <Text style={styles.dateButtonText}>
                   {quizState.settings.endDate
                     ? new Date(quizState.settings.endDate).toLocaleDateString()
-                    : "Set End Date"}
+                    : t("createenddate")}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -620,11 +658,13 @@ const RenderSettings = ({
 
           {/* Results Display Settings */}
           <View style={styles.subsection}>
-            <Text style={styles.subsectionTitle}>Results Display</Text>
+            <Text style={styles.subsectionTitle}>
+              {t("resultsDisplaySettingsTitle")}
+            </Text>
             <View style={styles.settingsGrid}>
               <View style={styles.settingItem}>
                 <Text style={styles.settingLabel}>
-                  Show Results Immediately
+                  {t("creationshowresult")}
                 </Text>
                 <Switch
                   value={quizState.settings.showResultsImmediately}
@@ -647,7 +687,9 @@ const RenderSettings = ({
               </View>
 
               <View style={styles.settingItem}>
-                <Text style={styles.settingLabel}>Show Score Distribution</Text>
+                <Text style={styles.settingLabel}>
+                  {t("creationshowscoredistribution")}{" "}
+                </Text>
                 <Switch
                   value={quizState.settings.showScoreDistribution}
                   onValueChange={(value) =>
@@ -669,7 +711,9 @@ const RenderSettings = ({
               </View>
 
               <View style={styles.settingItem}>
-                <Text style={styles.settingLabel}>Enable Leaderboard</Text>
+                <Text style={styles.settingLabel}>
+                  {t("creationenableleaderboard")}
+                </Text>
                 <Switch
                   value={quizState.settings.enableLeaderboard}
                   onValueChange={(value) =>
@@ -969,6 +1013,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#003333",
     fontWeight: "300",
+    width: "60%",
   },
   scoringSection: {
     marginTop: 20,

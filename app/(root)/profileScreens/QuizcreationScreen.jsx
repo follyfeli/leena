@@ -252,10 +252,7 @@ const QuizcreationScreen = ({ navigation }) => {
       const { status } =
         await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== "granted") {
-        Alert.alert(
-          "Permission needed",
-          "We need access to your media library for uploading images."
-        );
+        Alert.alert(t("creationalerttitle"), t("creationalertmessage"));
       }
     }
   };
@@ -276,12 +273,12 @@ const QuizcreationScreen = ({ navigation }) => {
     >
       <View style={styles.sectionHeader}>
         <Ionicons name="people" size={24} style={styles.sectionIcon} />
-        <Text style={styles.sectionTitle}>Target Audience & Goals</Text>
+        <Text style={styles.sectionTitle}>{t("creationtarget")}</Text>
       </View>
 
       <TextInput
         style={[styles.input, styles.enhancedInput]}
-        placeholder="Who is this quiz designed for?"
+        placeholder={t("creationtargetplaceholder")}
         value={quizState.targetingInfo.audience}
         onChangeText={(text) =>
           setQuizState({
@@ -293,7 +290,7 @@ const QuizcreationScreen = ({ navigation }) => {
 
       <TextInput
         style={[styles.input, styles.textArea, styles.enhancedInput]}
-        placeholder="What business goal does this quiz address?"
+        placeholder={t("creationbusiness")}
         value={quizState.targetingInfo.businessGoal}
         onChangeText={(text) =>
           setQuizState({
@@ -305,12 +302,17 @@ const QuizcreationScreen = ({ navigation }) => {
         numberOfLines={4}
       />
 
-      <Text style={[styles.sectionTitle, { fontSize: 16, marginTop: 20 }]}>
-        Learning Objectives
+      <Text
+        style={[
+          styles.sectionTitle,
+          { fontSize: 16, marginTop: 20, marginBottom: 10 },
+        ]}
+      >
+        {t("creationlearningobjectif")}
       </Text>
       <TextInput
         style={[styles.input, styles.enhancedInput]}
-        placeholder="Add learning objective (press Enter to add)"
+        placeholder={t("creationlearningobjectifplaceholder")}
         onSubmitEditing={(event) => {
           const objective = event.nativeEvent.text.trim();
           if (
@@ -767,12 +769,12 @@ const QuizcreationScreen = ({ navigation }) => {
           size={24}
           style={styles.sectionIcon}
         />
-        <Text style={styles.sectionTitle}>Basic Information</Text>
+        <Text style={styles.sectionTitle}> {t("editprofilbasiq")} </Text>
       </View>
 
       <TextInput
         style={[styles.input, styles.enhancedInput]}
-        placeholder="Create an engaging quiz title..."
+        placeholder={t("basiqtitleplaceholder")}
         value={quizState.basicInfo.title}
         onChangeText={(text) =>
           setQuizState({
@@ -785,7 +787,7 @@ const QuizcreationScreen = ({ navigation }) => {
 
       <TextInput
         style={[styles.input, styles.textArea, styles.enhancedInput]}
-        placeholder="Describe what participants will learn..."
+        placeholder={t("basiqdescriptionplaceholder")}
         value={quizState.basicInfo.description}
         onChangeText={(text) =>
           setQuizState({
@@ -808,8 +810,8 @@ const QuizcreationScreen = ({ navigation }) => {
           <Ionicons name="cloud-upload-outline" size={24} color={"#FFA500"} />
           <Text style={styles.imageButtonText}>
             {quizState.basicInfo.coverImage
-              ? "Change Cover Image"
-              : "Upload Cover Image"}
+              ? t("coverchangetitle")
+              : t("coveruploadtitle")}
           </Text>
         </TouchableOpacity>
 
@@ -841,7 +843,7 @@ const QuizcreationScreen = ({ navigation }) => {
             })
           }
           style={[styles.dropdown, styles.enhancedDropdown]}
-          placeholder="Select Category"
+          placeholder={t("creationcategorietitle")}
           modalProps={{
             animationType: "fade",
             transparent: true,
@@ -877,7 +879,7 @@ const QuizcreationScreen = ({ navigation }) => {
               })
             }
             style={[styles.dropdown, styles.enhancedDropdown]}
-            placeholder="Select Difficulty"
+            placeholder={t("creationdifficultetitle")}
             modalProps={{
               animationType: "fade",
               transparent: true,
@@ -913,7 +915,7 @@ const QuizcreationScreen = ({ navigation }) => {
               })
             }
             style={[styles.dropdown, styles.enhancedDropdown]}
-            placeholder="Select Time Limit"
+            placeholder={t("creationtimelimit")}
             listMode="MODAL"
           />
         </View>
@@ -922,7 +924,7 @@ const QuizcreationScreen = ({ navigation }) => {
       <View style={styles.tagsInput}>
         <TextInput
           style={[styles.input, styles.enhancedInput]}
-          placeholder="Add tags (press Enter to add)"
+          placeholder={t("creationtagplaceholder")}
           onSubmitEditing={(event) => {
             const tag = event.nativeEvent.text.trim();
             if (tag && !quizState.basicInfo.tags.includes(tag)) {
@@ -970,10 +972,7 @@ const QuizcreationScreen = ({ navigation }) => {
       const { status } =
         await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== "granted") {
-        Alert.alert(
-          "Permission needed",
-          "Sorry, we need camera roll permissions to upload images."
-        );
+        Alert.alert(t("creationalerttitle"), t("creationalertmessage"));
       }
     }
   };
@@ -991,7 +990,10 @@ const QuizcreationScreen = ({ navigation }) => {
       <View style={styles.questionsList}>
         {quizState.questions.length > 0 && (
           <>
-            <Text style={styles.questionsListTitle}>Added Questions:</Text>
+            <Text style={styles.questionsListTitle}>
+              {" "}
+              {t("creationaddedquestion")}{" "}
+            </Text>
             {quizState.questions.map((question, index) => (
               <View key={`question-${index}`} style={styles.questionItem}>
                 <View style={styles.questionContent}>
@@ -1025,15 +1027,15 @@ const QuizcreationScreen = ({ navigation }) => {
                   <TouchableOpacity
                     onPress={() => {
                       Alert.alert(
-                        "Delete Question",
-                        "Are you sure you want to delete this question?",
+                        t("creationalertdeletetitle"),
+                        t("creationalertdelete"),
                         [
                           {
-                            text: "Cancel",
+                            text: t("cancel"),
                             style: "cancel",
                           },
                           {
-                            text: "Delete",
+                            text: t("delete"),
                             style: "destructive",
                             onPress: () => {
                               const newQuestions = quizState.questions.filter(
@@ -1081,11 +1083,11 @@ const QuizcreationScreen = ({ navigation }) => {
               style={styles.backIcon}
             />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Create Quiz</Text>
+          <Text style={styles.headerTitle}>{t("creationtitle")}</Text>
         </View>
 
         <Text style={styles.headerSubtitle}>
-          Step {currentStep} of {totalSteps}
+          {t("Step")} {currentStep} of {totalSteps}
         </Text>
       </View>
 
@@ -1105,7 +1107,7 @@ const QuizcreationScreen = ({ navigation }) => {
           {/* {currentStep === 4 && (
             <PricingSection quizState={quizState} setQuizState={setQuizState} />
           )} */}
-          {/*   {currentStep === 4 && RenderSettings()} */}
+
           {currentStep === 4 && (
             <RenderSettings
               quizState={quizState}
@@ -1124,7 +1126,7 @@ const QuizcreationScreen = ({ navigation }) => {
             onPress={() => handleStepChange(currentStep - 1)}
           >
             <Ionicons name="arrow-back" size={24} color={"#FFFFFF"} />
-            <Text style={styles.navButtonText}>Previous</Text>
+            <Text style={styles.navButtonText}> {t("creationprevious")} </Text>
           </TouchableOpacity>
         )}
 
@@ -1133,7 +1135,7 @@ const QuizcreationScreen = ({ navigation }) => {
             style={[styles.navButton, styles.nextButton]}
             onPress={() => handleStepChange(currentStep + 1)}
           >
-            <Text style={styles.navButtonText}>Next</Text>
+            <Text style={styles.navButtonText}> {t("creationnext")} </Text>
             <Ionicons name="arrow-forward" size={24} color={"#FFFFFF"} />
           </TouchableOpacity>
         ) : (

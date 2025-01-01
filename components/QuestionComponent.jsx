@@ -134,26 +134,28 @@ const QuestionComponent = ({
     const newErrors = {};
 
     if (!currentQuestion.question.trim()) {
-      newErrors.question = "Question is required";
+      newErrors.question = t("creationquestionrequired");
     } else if (currentQuestion.question.length > MAX_QUESTION_LENGTH) {
-      newErrors.question = `Question must be less than ${MAX_QUESTION_LENGTH} characters`;
+      newErrors.question = `${t(
+        "creationquestionlessone"
+      )} ${MAX_QUESTION_LENGTH}  ${t("creationquestionlesstwo")}`;
     }
 
     if (!currentQuestion.type) {
-      newErrors.type = "Question type is required";
+      newErrors.type = t("creationquestiontyperequired");
     }
 
     // Type-specific validation
     switch (currentQuestion.type) {
       case "multiple-choice":
         if (currentQuestion.options.length < 2) {
-          newErrors.options = "At least 2 options are required";
+          newErrors.options = t("creationmultichoicerequirementfirst");
         }
         if (currentQuestion.options.some((option) => !option.trim())) {
-          newErrors.options = "All options must be filled";
+          newErrors.options = t("creationmultichoicerequirementthird");
         }
         if (currentQuestion.correctAnswer === null) {
-          newErrors.correctAnswer = "Please select a correct answer";
+          newErrors.correctAnswer = t("creationmultichoicerequirementseconde");
         }
         break;
 
@@ -169,14 +171,15 @@ const QuestionComponent = ({
 
       case "essay":
         if (!currentQuestion.explanation) {
-          newErrors.explanation =
-            "Sample answer is required for essay questions";
+          newErrors.explanation = t("creationessayrequired");
         }
         break;
     }
 
     if (currentQuestion.explanation?.length > MAX_EXPLANATION_LENGTH) {
-      newErrors.explanation = `Explanation must be less than ${MAX_EXPLANATION_LENGTH} characters`;
+      newErrors.explanation = ` ${t(
+        "creationexplanationfirst"
+      )} ${MAX_EXPLANATION_LENGTH}  ${t("creationexplanationsecond")}`;
     }
 
     setErrors(newErrors);
@@ -189,7 +192,7 @@ const QuestionComponent = ({
 
       switch (type) {
         case "true-false":
-          newQuestion.options = ["True", "False"];
+          newQuestion.options = [t("creationtrue"), t("creationfalse")];
           newQuestion.correctAnswer = 0;
           break;
         case "essay":
@@ -231,7 +234,7 @@ const QuestionComponent = ({
                 { flex: 1 },
                 errors.options && styles.errorInput,
               ]}
-              placeholder={`Option ${index + 1}`}
+              placeholder={`${t("creationotpion")} ${index + 1}`}
               value={option}
               onChangeText={(text) => {
                 const newOptions = [...currentQuestion.options];
@@ -289,7 +292,7 @@ const QuestionComponent = ({
               onPress={handleAddOption}
             >
               <Ionicons name="add-circle-outline" size={24} color="#1a2151" />
-              <Text style={styles.addOptionText}>Add Option</Text>
+              <Text style={styles.addOptionText}>{t("creationaddoption")}</Text>
             </TouchableOpacity>
           )}
       </>
@@ -301,10 +304,7 @@ const QuestionComponent = ({
       const { status } =
         await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== "granted") {
-        Alert.alert(
-          "Permission needed",
-          "Sorry, we need camera roll permissions to make this work!"
-        );
+        Alert.alert(t("creationalerttitle"), t("creationalertmessage"));
         return;
       }
 
@@ -325,7 +325,6 @@ const QuestionComponent = ({
       }
     } catch (error) {
       console.error("Image pick error:", error);
-      Alert.alert("Error", "Failed to pick image. Please try again.");
     }
   };
 
@@ -421,7 +420,7 @@ const QuestionComponent = ({
     >
       <View style={styles.sectionHeader}>
         <Ionicons name="help-circle" size={24} style={styles.sectionIcon} />
-        <Text style={styles.sectionTitle}>Question Details</Text>
+        <Text style={styles.sectionTitle}> {t("creationsecondetitle")} </Text>
       </View>
 
       <View style={[styles.categoryContainer, { zIndex: 3000 }]}>
@@ -456,7 +455,7 @@ const QuestionComponent = ({
             styles.enhancedInput,
             errors.question && styles.errorInput,
           ]}
-          placeholder="Enter your question"
+          placeholder={t("creationquestionplaceholder")}
           value={currentQuestion.question}
           onChangeText={(text) =>
             setCurrentQuestion({ ...currentQuestion, question: text })
@@ -466,7 +465,7 @@ const QuestionComponent = ({
           maxLength={MAX_QUESTION_LENGTH}
         />
         <Text style={styles.charCount}>
-          {remainingChars.question} characters remaining
+          {remainingChars.question} {t("creationremaining")}
         </Text>
         {errors.question && (
           <Text style={styles.errorText}>{errors.question}</Text>
@@ -479,7 +478,9 @@ const QuestionComponent = ({
           onPress={pickQuestionImage}
         >
           <Ionicons name="image" size={24} color="#003333" />
-          <Text style={styles.imageUploadText}>Select from Gallery</Text>
+          <Text style={styles.imageUploadText}>
+            {t("creationselectfromgalery")}
+          </Text>
         </TouchableOpacity>
         {/* image selection */}
         {renderImageSection()}
@@ -495,7 +496,7 @@ const QuestionComponent = ({
             styles.enhancedInput,
             errors.explanation && styles.errorInput,
           ]}
-          placeholder="Explanation (optional)"
+          placeholder={t("creationexplanationplaceholder")}
           value={currentQuestion.explanation}
           onChangeText={(text) =>
             setCurrentQuestion({ ...currentQuestion, explanation: text })
@@ -505,7 +506,7 @@ const QuestionComponent = ({
           maxLength={MAX_EXPLANATION_LENGTH}
         />
         <Text style={styles.charCount}>
-          {remainingChars.explanation} characters remaining
+          {remainingChars.explanation} {t("creationremaining")}
         </Text>
         {errors.explanation && (
           <Text style={styles.errorText}>{errors.explanation}</Text>
@@ -525,7 +526,9 @@ const QuestionComponent = ({
         ) : (
           <>
             <Ionicons name="add-circle" size={24} color="#FFFFFF" />
-            <Text style={styles.addQuestionButtonText}>Add Question</Text>
+            <Text style={styles.addQuestionButtonText}>
+              {t("creationaddquestion")}
+            </Text>
           </>
         )}
       </TouchableOpacity>

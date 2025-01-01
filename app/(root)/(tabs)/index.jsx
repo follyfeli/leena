@@ -28,11 +28,9 @@ const Home = () => {
   const [featuredQuizzes, setFeaturedQuizzes] = useState([]);
   const [quizzes, setQuizzes] = useState([]);
 
-  /*  useEffect(() => {
+  useEffect(() => {
     fetchQuizzes();
-    console.log("les quizzes:", quizzes);
-    console.log("les quizzes:", quizzes.quizId);
-  }, [params.filter, quizzes.length]); */
+  }, [params.filter, quizzes.length]);
 
   const fetchQuizzes = async () => {
     try {
@@ -80,16 +78,19 @@ const Home = () => {
     }
   };
 
-  const handleCardPress = () =>
-    router.push(`/detailscatalogue/${quizzes.quizId}`);
-
+  /* const handleCardPress = () =>
+    router.push(`/detailscatalogue/${quizzes.quizId}`); */
+  const handleCardPress = (quizId) => {
+    console.log("Navigating to quiz:", quizId); // For debugging
+    router.push(`/detailscatalogue/${quizId}`);
+  };
   return (
     <SafeAreaView className="h-full bg-white">
       <FlatList
         data={quizzes}
         numColumns={2}
         renderItem={({ item }) => (
-          <Card item={item} onPress={() => handleCardPress(quizzes.quizId)} />
+          <Card item={item} onPress={() => handleCardPress(item.quizId)} />
         )}
         keyExtractor={(item) => item.$id}
         contentContainerClassName="pb-32"
@@ -133,7 +134,7 @@ const Home = () => {
                 renderItem={({ item }) => (
                   <FeaturedCard
                     item={item}
-                    onPress={() => handleCardPress(featuredQuizzes.quizId)}
+                    onPress={() => handleCardPress(item.quizId)}
                   />
                 )}
                 keyExtractor={(item) => item.$id}

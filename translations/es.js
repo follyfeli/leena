@@ -161,4 +161,100 @@ export default {
   username: "@Nombre de usuario",
   editlinkedinurl: "LinkedIn URL de perfil",
   save: "Guardar cambios",
+  // Quiz Creation
+  creationalerttitle: "Permiso necesario",
+  creationalertmessage:
+    "Lo sentimos, necesitamos permisos de carrete para cargar imágenes.",
+  basiqtitleplaceholder: "Crea un título de prueba atractivo...",
+  basiqdescriptionplaceholder:
+    "Describe lo que los participantes aprenderán ...",
+  coverchangetitle: "Cambiar imagen de portada",
+  coveruploadtitle: "Subir imagen de portada",
+  creationcategorietitle: "Seleccionar categoría",
+  creationdifficultetitle: "seleccionar dificultad",
+  creationtimelimit: "límite de tiempo",
+  creationtagplaceholder: "Agregar etiquetas (presione Enter para agregar)",
+  creationtitle: "Crear cuestionario",
+  Step: "Paso",
+  creationprevious: "Anterior",
+  creationnext: "Siguiente",
+  creationtarget: "Público objetivo y objetivos",
+  creationtargetplaceholder: "¿Para quién está diseñado este cuestionario?",
+  creationbusiness: "¿Qué objetivo empresarial aborda este cuestionario?",
+  creationlearningobjectif: "Objetivos de aprendizaje",
+  creationlearningobjectifplaceholder:
+    "Agregar objetivo de aprendizaje (presione Enter para agregar)",
+  creationaddedquestion: "Preguntas agregadas",
+  creationalertdelete: "¿Estás seguro de que deseas eliminar esta pregunta?",
+  creationalertdeletetitle: "Eliminar pregunta",
+  cancel: "Cancelar",
+  delete: "Eliminar",
+  creationquestionrequired: "Se requiere pregunta",
+  creationquestionlessone: "La pregunta debe ser menor que",
+  creationquestionlesstwo: "personajes",
+  creationquestiontyperequired: "Se requiere tipo de pregunta",
+  creationmultichoicerequirementfirst: "Se requieren al menos 2 opciones",
+  creationmultichoicerequirementseconde:
+    "Por favor seleccione una respuesta correcta",
+  creationmultichoicerequirementthird:
+    "Todas las opciones deben ser completadas.",
+  creationessayrequired:
+    "Se requiere una respuesta de muestra para preguntas de ensayo",
+  creationexplanationfirst: "La explicación debe ser menor que",
+  creationexplanationsecond: "personajes",
+  creationtrue: "Verdadero",
+  creationfalse: "Falso",
+  creationaddoption: "Agregar opción",
+  creationaddquestion: "Agregar pregunta",
+  creationsecondetitle: "Detalles de la pregunta",
+  creationremaining: "personajes restantes",
+  creationquestionplaceholder: "Introduzca aquí su pregunta...",
+  creationselectfromgalery: "Seleccionar de la galería",
+  creationotpion: "Opción",
+  creationexplanationplaceholder: "Explicación (opcional)",
+
+  // Quiz Settings
+  quizSettingsTitle: "Configuración ",
+  quizSettingBehaviortitle: "Comportamiento de la pregunta",
+  creationquestionshudule: "Preguntas aleatorias",
+  creationanswershudule: "Mezclar respuestas",
+  creationshowexplain: "Mostrar explicación",
+  creationallowretake: "Permitir retomar",
+  creationmaxretake: "Intentos máximos",
+  creationshowtimer: "Mostrar temporizador",
+  creationallowskip: "Permitir saltar",
+
+  //Feedback Settings
+  feedbackSettingsTitle: "Configuración de comentarios",
+  creationshowimmediatefeedback: "Mostrar comentarios inmediatos",
+  creationshowcorrectanswer: "Mostrar respuesta correcta",
+  creationallowanswerreview: "Permitir revisión de respuestas",
+
+  //Time Settings
+  timeSettingsTitle: "Configuración de hora",
+  timesettingsenabled: "Límite de tiempo habilitado",
+  timelimite: "Límite de tiempo (minutos)",
+
+  //Scoring Settings
+  scoringSettingsTitle: "Configuración de puntuación",
+  creationpassingscore: "Puntaje de aprobación (%)",
+  creationnegativemarking: "Marcado negativo",
+
+  //Access Control Settings
+  accessControlSettingsTitle: "Configuración de control de acceso",
+  accessControlPublic: "Público",
+  accessControlPrivate: "Privado",
+  accescontrolpassword: "Protección con contraseña",
+  accescontrolpasswordplaceholder: "Ingrese la Contraseña para acceder",
+
+  //Scheduling
+  schedulingSettingsTitle: "Configuración de programación",
+  createstartdate: "Fecha de inicio",
+  createenddate: "Fecha de finalización",
+
+  //Results Display Settings
+  resultsDisplaySettingsTitle: "Configuración de visualización de resultados",
+  creationshowresult: "Mostrar resultados inmediatamente",
+  creationshowscoredistribution: "Mostrar distribución de puntuación",
+  creationenableleaderboard: "Habilitar tabla de clasificación",
 };

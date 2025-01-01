@@ -25,7 +25,7 @@ import { useEffect, useState } from "react";
 
 const Property = () => {
   const { id } = useLocalSearchParams();
-  console.log("quizz id ", id);
+  console.log(" details quizz id ", id);
   const { user } = useAuth();
   const windowHeight = Dimensions.get("window").height;
   const [quiz, setQuiz] = useState(null);
@@ -33,7 +33,7 @@ const Property = () => {
   const [liked, setLiked] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
+  /* useEffect(() => {
     fetchQuizDetails();
   }, [id]);
 
@@ -61,9 +61,51 @@ const Property = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }; */
 
-  const handleLike = async () => {
+  useEffect(() => {
+    console.log("Fetching quiz with ID:", id);
+    fetchQuizDetails();
+  }, [id]);
+
+  /* const fetchQuizDetails = async () => {
+    try {
+      setLoading(true);
+      const docRef = doc(db, "quizzes", id);
+      console.log("Fetching document with ref:", docRef.path); // Debug log
+
+      const docSnap = await getDoc(docRef);
+      console.log("Document exists?", docSnap.exists()); // Debug log
+      console.log("Document data:", docSnap.data()); // Debug log
+
+      if (docSnap.exists()) {
+        const quizData = { $id: docSnap.id, ...docSnap.data() };
+        console.log("Quiz data:", quizData); // Debug log
+        setQuiz(quizData);
+        setLiked(quizData.likes?.includes(user?.uid));
+
+        // Update view count
+        await updateDoc(docRef, {
+          views: (quizData.views || 0) + 1,
+        });
+      } else {
+        console.log("No document found!"); // Debug log
+        setError("Quiz not found");
+      }
+    } catch (err) {
+      console.error("Error fetching quiz:", err);
+      setError(`Error loading quiz: ${err.message}`); // More detailed error
+    } finally {
+      setLoading(false);
+    }
+  }; */
+
+  // Add a debug log for quiz state
+  useEffect(() => {
+    console.log("Current quiz state:", quiz);
+  }, [quiz]);
+
+  /* const handleLike = async () => {
     if (!user) {
       router.push("/auth/login");
       return;
@@ -78,10 +120,78 @@ const Property = () => {
     } catch (err) {
       console.error("Error updating likes:", err);
     }
-  };
+  }; */
 
   const handleShare = () => {
     // Implement share functionality
+  };
+
+  const fetchQuizDetails = async () => {
+    try {
+      setLoading(true);
+      const docRef = doc(db, "quizzes", id);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        const quizData = { $id: docSnap.id, ...docSnap.data() };
+        setQuiz(quizData);
+
+        // Fix the likes check - handle both number and array cases
+        if (Array.isArray(quizData.likes)) {
+          setLiked(quizData.likes.includes(user?.uid));
+        } else {
+          // If likes is a number or undefined, initialize it as an array
+          setLiked(false);
+          // Optionally update the document to convert likes to array
+          await updateDoc(docRef, {
+            likes: [],
+          });
+        }
+
+        // Update view count
+        await updateDoc(docRef, {
+          views: (quizData.views || 0) + 1,
+        });
+      } else {
+        setError("Quiz not found");
+      }
+    } catch (err) {
+      console.error("Error fetching quiz:", err);
+      setError("Error loading quiz");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLike = async () => {
+    if (!user) {
+      router.push("/auth/login");
+      return;
+    }
+
+    try {
+      const docRef = doc(db, "quizzes", id);
+      const docSnap = await getDoc(docRef);
+      const currentData = docSnap.data();
+
+      // Initialize likes as array if it's not already
+      let currentLikes = Array.isArray(currentData.likes)
+        ? currentData.likes
+        : [];
+
+      // Update likes array
+      const newLikes = liked
+        ? currentLikes.filter((uid) => uid !== user.uid)
+        : [...currentLikes, user.uid];
+
+      await updateDoc(docRef, {
+        likes: newLikes,
+      });
+
+      setLiked(!liked);
+    } catch (err) {
+      console.error("Error updating likes:", err);
+    }
   };
 
   if (loading) {

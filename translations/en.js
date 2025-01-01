@@ -159,4 +159,96 @@ export default {
   username: "@Username",
   editlinkedinurl: "LinkedIn profile URL",
   save: " Save Changes",
+  // Quiz Creation
+  creationalerttitle: "Permission needed",
+  creationalertmessage:
+    "Sorry, we need camera roll permissions to upload images.",
+  basiqtitleplaceholder: "Create an engaging quiz title...",
+  basiqdescriptionplaceholder: "Describe what participants will learn...",
+  coverchangetitle: "Change Cover Image",
+  coveruploadtitle: "Upload Cover Image",
+  creationcategorietitle: "Select Category",
+  creationdifficultetitle: "Select Difficulty",
+  creationtimelimit: "Select Time Limit",
+  creationtagplaceholder: "Add tags (press Enter to add)",
+  creationtitle: "Create Quiz",
+  Step: "Step",
+  creationprevious: "Previous",
+  creationnext: "Next",
+  creationtarget: "Target Audience & Goals",
+  creationtargetplaceholder: "Who is this quiz designed for?",
+  creationbusiness: "What business goal does this quiz address?",
+  creationlearningobjectif: "Learning Objectives",
+  creationlearningobjectifplaceholder:
+    "Add learning objective (press Enter to add)",
+  creationaddedquestion: "Added Questions",
+  creationalertdelete: "Are you sure you want to delete this question?",
+  creationalertdeletetitle: "Delete Question",
+  cancel: "Cancel",
+  delete: "Delete",
+  creationquestionrequired: "Question is required",
+  creationquestionlessone: "Question must be less than ",
+  creationquestionlesstwo: " characters",
+  creationquestiontyperequired: "Question type is required",
+  creationmultichoicerequirementfirst: "At least 2 options are required",
+  creationmultichoicerequirementseconde: "Please select a correct answer",
+  creationmultichoicerequirementthird: "All options must be filled",
+  creationessayrequired: "Sample answer is required for essay questions",
+  creationexplanationfirst: "Explanation must be less than",
+  creationexplanationsecond: " characters",
+  creationtrue: "True",
+  creationfalse: "False",
+  creationaddoption: "Add Option",
+  creationaddquestion: "Add Question",
+  creationsecondetitle: "Question Details",
+  creationremaining: "characters remaining",
+  creationquestionplaceholder: "Enter your question here...",
+  creationselectfromgalery: "Select from gallery",
+  creationotpion: "Option",
+  creationexplanationplaceholder: "Explanation (optional)",
+
+  // Quiz Settings
+  quizSettingsTitle: "Quiz Settings",
+  quizSettingBehaviortitle: "Question Behavior",
+  creationquestionshudule: "Shuffle Questions",
+  creationanswershudule: "Shuffle Answers",
+  creationshowexplain: "Show Explanation",
+  creationallowretake: "Allow Retake",
+  creationmaxretake: "Max Retake Attempts",
+  creationshowtimer: "Show Timer",
+  creationallowskip: "Allow Skip",
+
+  //Feedback Settings
+  feedbackSettingsTitle: "Feedback Settings",
+  creationshowimmediatefeedback: "Show Immediate Feedback",
+  creationshowcorrectanswer: "Show Correct Answer",
+  creationallowanswerreview: "Allow Answer Review",
+
+  //Time Settings
+  timeSettingsTitle: "Time Settings",
+  timesettingsenabled: "Time Limit Enabled",
+  timelimite: "Time Limit (minutes)",
+
+  //Scoring Settings
+  scoringSettingsTitle: "Scoring Settings",
+  creationpassingscore: "Passing Score (%)",
+  creationnegativemarking: "Negative Marking",
+
+  //Access Control Settings
+  accessControlSettingsTitle: "Access Control Settings",
+  accessControlPublic: "Public",
+  accessControlPrivate: "Private",
+  accescontrolpassword: "Password Protection",
+  accescontrolpasswordplaceholder: "Enter Password for access",
+
+  //Scheduling
+  schedulingSettingsTitle: "Scheduling Settings",
+  createstartdate: "Set Start Date",
+  createenddate: "Set End Date",
+
+  //Results Display Settings
+  resultsDisplaySettingsTitle: "Results Display Settings",
+  creationshowresult: "Show Results immediately",
+  creationshowscoredistribution: "Show Score Distribution",
+  creationenableleaderboard: "Enable Leaderboard",
 };
