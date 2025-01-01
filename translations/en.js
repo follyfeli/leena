@@ -22,6 +22,13 @@ export default {
   categorieseighthtitle: "Lifestyle",
   categoriesninthtitle: "Professional",
   categoriestenthtitle: "Others",
+  //profil translations
+  profil: "Profile",
+  CreateQuizzes: "Create Quizzes",
+  MyQuizzes: "My Quizzes",
+  InviteFriends: "Invite Friends",
+  Language: "Language",
+  Logout: "Logout",
   // Quiz Categories
   quizCategoryEducation: "Education 📚",
   quizCategoryMathematics: "Mathematics 🔢",
@@ -98,4 +105,58 @@ export default {
   incorrectAttempt: "Incorrect Attempt",
   timeOverrun: "Time Overrun",
   hintUsed: "Hint Used",
+
+  // Error Messages signin
+  emailRequired: "Email is required",
+  emailInvalid: "Invalid email address",
+  passwordRequired: "Password is required",
+  passwordMinLength: "Password must be at least 6 characters long",
+  nameRequired: "Name is required",
+
+  // Error Messages firebase
+  emailAlreadyInUse: "Email already in use",
+  invalidEmail: "Invalid email address",
+  weakPassword: "Password must be at least 6 characters long",
+  userNotFound: "User not found",
+  wrongPassword: "Wrong password",
+  tooManyRequests: "Too many requests. Please try again later",
+  networkRequestFailed:
+    "Network request failed. Please check your internet connection",
+  //alert signin
+  Success: "Success",
+  passwordResetEmailSent:
+    "Email de réinitialisation envoyé. Veuillez vérifier votre boîte de réception.",
+  Error: "Error",
+  Errormessage: "An error has occurred. Please try again later.",
+
+  Bienvenue: "Welcome",
+  Connectezvous: "Log in to continue",
+  motdepasseoublier: "Forgotten password?",
+  Seconnecter: "Log in",
+  pasencoredecompte: "No account yet?",
+  sinscrire: "Register",
+  creeruncompte: "Create an account",
+  inscription: "Register to get started",
+  dejauncompte: "Already have an account?",
+  reinitialisation: "Enter your email to reset password",
+  sendlink: "Send link",
+  theconnextion: "the connection",
+  reinitialisationtitle: "Reset",
+  //edit profile
+  editprofile: "Edit Profile",
+  editprofiledescription: "Update your profile information",
+  editprofilbasiq: "Basic Information",
+  name: "Name",
+  entername: "Enter your name",
+  bio: "Bio",
+  enterbio: "Tell us about yourself",
+  additionalinformation: "Additional Information",
+  editprofillocation: "Location",
+  editenterlocation: "Enter your location",
+  editwebsite: "Website",
+  editenterwebsite: "Enter your website",
+  editsociallinks: "Social Links",
+  username: "@Username",
+  editlinkedinurl: "LinkedIn profile URL",
+  save: " Save Changes",
 };

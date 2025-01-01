@@ -22,6 +22,13 @@ export default {
   categorieseighthtitle: "Estilo de vida",
   categoriesninthtitle: "Profesional",
   categoriestenthtitle: "Otros",
+  //profil translations
+  profil: "Perfil",
+  CreateQuizzes: "Crear Quizzes",
+  MyQuizzes: "Mis Quizzes",
+  InviteFriends: "Invitar amigos",
+  Language: "Idioma",
+  Logout: "Cerrar sesión",
   // Quiz Categories
   quizCategoryEducation: "Educación 📚",
   quizCategoryMathematics: "Matemáticas 🔢",
@@ -98,4 +105,60 @@ export default {
   incorrectAttempt: "Intento incorrecto",
   timeOverrun: "Exceso de tiempo",
   hintUsed: "Pista utilizada",
+
+  // Error Messages signin
+  emailRequired: "El correo es requerido",
+  emailInvalid: "Correo electrónico no valido",
+  passwordRequired: "La contraseña es requerida",
+  passwordMinLength: "La contraseña debe tener al menos 6 caracteres",
+  nameRequired: "El nombre es requerido",
+
+  // Error Messages firebase
+  emailAlreadyInUse: "Correo ya en uso",
+  invalidEmail: "Correo electronico no valido",
+  weakPassword: " La contraseña debe tener al menos 6 caracteres",
+  userNotFound: "Usuario no encontrado",
+  wrongPassword: "Contraseña incorrecta",
+  tooManyRequests: "Muchas solicitudes. Por favor, intenta de nuevo mas tarde",
+  networkRequestFailed:
+    "Fallo en la solicitud de red. Por favor, chequea tu conexión a internet",
+
+  //alert signin
+  Success: "Éxito",
+  passwordResetEmailSent:
+    "Restablecer correo electrónico enviado. Por favor revisa tu bandeja de entrada.",
+  Error: "Error",
+  Errormessage:
+    "Ha ocurrido un error inesperado. Por favor, intenta de nuevo mas tarde.",
+  Bienvenue: "Bienvenido",
+  Connectezvous: "Inicia sesión para continuar",
+  motdepasseoublier: "¿Olvidaste tu contraseña?",
+  Seconnecter: "Acceso",
+  pasencoredecompte: "¿Aún no tienes cuenta?",
+  sinscrire: "Registro",
+  creeruncompte: "Crea una cuenta",
+  inscription: "Regístrese para comenzar",
+  dejauncompte: "¿Ya tienes una cuenta?",
+  reinitialisation:
+    "Ingrese su correo electrónico para restablecer la contraseña",
+  sendlink: "Enviar enlace",
+  theconnextion: "la conexión",
+  reinitialisationtitle: "Reinicializar",
+  //edit profile
+  editprofile: "Editar perfil",
+  editprofiledescription: "Actualiza la información de tu perfil",
+  editprofilbasiq: "Información básica",
+  name: "Nombre",
+  entername: "Ingresa tu nombre",
+  bio: "biografía",
+  enterbio: "Cuéntanos sobre ti",
+  additionalinformation: "Información adicional",
+  editprofillocation: "Ubicación",
+  editenterlocation: "Introduce tu ubicación",
+  editwebsite: "Sitio web",
+  editenterwebsite: "Ingresa a tu sitio web",
+  editsociallinks: "Enlaces sociales",
+  username: "@Nombre de usuario",
+  editlinkedinurl: "LinkedIn URL de perfil",
+  save: "Guardar cambios",
 };

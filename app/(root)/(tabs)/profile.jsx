@@ -20,6 +20,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { auth, db } from "@/service/firebase/firebaseconfig";
 import { useRouter } from "expo-router";
 import * as Sharing from "expo-sharing";
+import { useLanguage } from "@/i18n";
 
 const SettingsItem = ({
   icon,
@@ -50,6 +51,7 @@ const profile = () => {
   const router = useRouter();
   const [isUpdating, setIsUpdating] = useState(false);
   const avatar = require("@/assets/images/default-avatar.png");
+  const { t } = useLanguage();
   const handleLogout = async () => {
     try {
       await logout();
@@ -169,7 +171,7 @@ const profile = () => {
         contentContainerClassName="pb-32 px-7 pt-10"
       >
         <View className="flex flex-row items-center justify-between mt-5">
-          <Text className="text-xl font-rubik-bold">Profile</Text>
+          <Text className="text-xl font-rubik-bold">{t("profil")}</Text>
           <Image source={icons.bell} className="size-5" />
         </View>
 
@@ -206,42 +208,35 @@ const profile = () => {
           <SettingsItem
             onPress={() => router.push("/profileScreens/QuizcreationScreen")}
             icon={icons.calendar}
-            title="Create Quizzes"
+            title={t("CreateQuizzes")}
           />
-          <SettingsItem icon={icons.calendar} title="My Quizzes" />
+          <SettingsItem icon={icons.calendar} title={t("MyQuizzes")} />
         </View>
 
         <View className="flex flex-col mt-5 border-t pt-5 border-primary-200">
           <SettingsItem
             onPress={() => router.push("/profileScreens/EditProfileScreen")}
             icon={icons.person}
-            title="Profile"
+            title={t("profil")}
           />
           <SettingsItem
             onPress={shareApp}
             icon={icons.people}
-            title="Invite Friends"
+            title={t("InviteFriends")}
           />
-          <SettingsItem icon={icons.bell} title="Notifications" />
+          {/*  <SettingsItem icon={icons.bell} title="Notifications" /> */}
           <SettingsItem
             onPress={() => router.push("/profileScreens/LanguageSelector")}
             icon={icons.language}
-            title="Language"
+            title={t("Language")}
           />
-          <SettingsItem icon={icons.info} title="Help Center" />
-          {/* {settings.slice(2).map((item, index) => (
-            <SettingsItem
-              key={index}
-              {...item}
-              onPress={() => handleSettingPress(item.type)}
-            />
-          ))} */}
+          {/*  <SettingsItem icon={icons.info} title="Help Center" /> */}
         </View>
 
         <View className="flex flex-col border-t mt-5 pt-5 border-primary-200">
           <SettingsItem
             icon={icons.logout}
-            title="Logout"
+            title={t("Logout")}
             textStyle="text-danger"
             showArrow={false}
             onPress={handleLogout}

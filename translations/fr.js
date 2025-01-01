@@ -22,6 +22,15 @@ export default {
   categorieseighthtitle: "Style de vie",
   categoriesninthtitle: "Professionnel",
   categoriestenthtitle: "Autres",
+
+  //profil translations
+  profil: "Profil",
+  CreateQuizzes: "Créer des quizz",
+  MyQuizzes: "Mes quizz",
+  InviteFriends: "Inviter des amis",
+  Language: "Langue",
+  Logout: "Deconnexion",
+  // Quiz Categories
   quizCategoryEducation: "Éducation 📚",
   quizCategoryMathematics: "Mathématiques 🔢",
   quizCategoryScience: "Science 🧬",
@@ -97,4 +106,60 @@ export default {
   incorrectAttempt: "Tentative incorrecte",
   timeOverrun: "Dépassement de temps",
   hintUsed: "Indice utilisé",
+
+  // Error Messages signin
+  emailRequired: "L'e-mail est requis",
+  emailInvalid: "Adresse e-mail invalide",
+  passwordRequired: "Le mot de passe est requis",
+  passwordMinLength: "Le mot de passe doit contenir au moins 6 caractères",
+  nameRequired: "Le nom est requis",
+
+  // Error Messages firebase
+  emailAlreadyInUse: "E-mail déjà utilisé",
+  invalidEmail: "Adresse e-mail invalide",
+  weakPassword: " Le mot de passe doit contenir au moins 6 caractères",
+  userNotFound: "Utilisateur non trouvé",
+  wrongPassword: "Mauvais mot de passe",
+  tooManyRequests: "Trop de tentatives. Veuillez réessayer plus tard",
+  networkRequestFailed:
+    "Problème de connexion. Vérifiez votre connexion internet",
+
+  //alert signin
+  Success: "Success",
+  passwordResetEmailSent:
+    "Email de réinitialisation envoyé. Veuillez vérifier votre boîte de réception.",
+  Error: "Erreur",
+  Errormessage: "Une erreur inattendue est survenue",
+
+  Bienvenue: "Bienvenue",
+  Connectezvous: "Connectez-vous pour continuer",
+  motdepasseoublier: "Mot de passe oublé ?",
+  Seconnecter: "Se connecter",
+  pasencoredecompte: "Pas encore de compte ?",
+  sinscrire: "S'inscrire",
+  creeruncompte: "Créer un compte",
+  inscription: "Inscrivez-vous pour commencer",
+  dejauncompte: "Déja un compte ?",
+  reinitialisation: "Entrez votre email pour réinitialiser le mot de passe",
+  sendlink: "Envoyer le lien",
+  theconnextion: "la connexion",
+  reinitialisationtitle: "Réinitialiser",
+
+  //edit profile
+  editprofile: "Modifier le profil",
+  editprofiledescription: "Mettre à jour vos informations de profil",
+  editprofilbasiq: "Informations de base",
+  name: "Nom",
+  entername: "Entrez votre nom",
+  bio: "Bio",
+  enterbio: "Parlez-nous de vous",
+  additionalinformation: "Informations supplémentaires",
+  editprofillocation: "Location",
+  editenterlocation: "Entrez votre location",
+  editwebsite: "Website",
+  editenterwebsite: "Entrez votre site web",
+  editsociallinks: "Liens sociaux",
+  username: "@Nom d'utilisateur",
+  editlinkedinurl: "LinkedIn URL de profil",
+  save: "Enregistrer les modifications",
 };

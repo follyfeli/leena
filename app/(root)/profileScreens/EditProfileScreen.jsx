@@ -15,10 +15,11 @@ import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@/service/firebase/firebaseconfig";
 import { useAuth } from "@/context/authContext";
 import { router } from "expo-router";
-
+import { useLanguage } from "@/i18n";
 const EditProfileScreen = () => {
   const { user, isLoading, refreshUser } = useAuth();
   const [saveloading, setsaveLoading] = useState(false);
+  const { t } = useLanguage();
   const [profileData, setProfileData] = useState({
     name: user?.name || "",
     bio: user?.bio || "",
@@ -122,8 +123,6 @@ const EditProfileScreen = () => {
         updatedAt: new Date().toISOString(),
       });
 
-      // Refresh user context
-      /*  await refreshUser(); */
       router.push("/profile");
 
       Alert.alert("Success", "Profile updated successfully");
@@ -182,9 +181,9 @@ const EditProfileScreen = () => {
       <ScrollView className="flex-1 px-4">
         <View className="py-4">
           <Text className="text-2xl font-bold text-gray-900 mb-1">
-            Edit Profile
+            {t("editprofile")}
           </Text>
-          <Text className="text-gray-500">Update your profile information</Text>
+          <Text className="text-gray-500">{t("editprofiledescription")} </Text>
         </View>
 
         {/* Profile Image Section */}
@@ -196,16 +195,10 @@ const EditProfileScreen = () => {
 
         {/* Basic Information */}
         {renderSection(
-          "Basic Information",
+          t("editprofilbasiq"),
           <>
-            {renderInput("Name", profileData.name, "name", "Enter your name")}
-            {renderInput(
-              "Bio",
-              profileData.bio,
-              "bio",
-              "Tell us about yourself",
-              true
-            )}
+            {renderInput(t("name"), profileData.name, "name", t("entername"))}
+            {renderInput(t("bio"), profileData.bio, "bio", t("enterbio"), true)}
             {/*  {renderInput(
               "Phone",
               profileData.phone,
@@ -217,44 +210,38 @@ const EditProfileScreen = () => {
 
         {/* Additional Information */}
         {renderSection(
-          "Additional Information",
+          t("additionalinformation"),
           <>
             {renderInput(
-              "Location",
+              t("editprofillocation"),
               profileData.location,
               "location",
-              "Enter your location"
+              t("editenterlocation")
             )}
             {renderInput(
-              "Website",
+              t("editwebsite"),
               profileData.website,
               "website",
-              "Enter your website"
+              t("editenterwebsite")
             )}
           </>
         )}
 
         {/* Social Links */}
         {renderSection(
-          "Social Links",
+          t("editsociallinks"),
           <>
             {renderInput(
               "Twitter",
               profileData.socialLinks.twitter,
               "socialLinks.twitter",
-              "@username"
+              t("username")
             )}
             {renderInput(
               "LinkedIn",
               profileData.socialLinks.linkedin,
               "socialLinks.linkedin",
-              "LinkedIn profile URL"
-            )}
-            {renderInput(
-              "GitHub",
-              profileData.socialLinks.github,
-              "socialLinks.github",
-              "GitHub username"
+              t("editlinkedinurl")
             )}
           </>
         )}
@@ -272,7 +259,7 @@ const EditProfileScreen = () => {
               <ActivityIndicator color="white" />
             ) : (
               <Text className="text-white text-center font-semibold text-lg">
-                Save Changes
+                {t("save")}
               </Text>
             )}
           </TouchableOpacity>

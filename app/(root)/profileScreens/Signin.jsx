@@ -13,16 +13,12 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  sendPasswordResetEmail,
-  updateProfile,
-} from "firebase/auth";
+import { sendPasswordResetEmail } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 import { auth, db } from "@/service/firebase/firebaseconfig"; // Adjust the path
 import { useAuth } from "@/context/authContext";
 import { useRouter } from "expo-router";
+import { useLanguage } from "@/i18n";
 const { width } = Dimensions.get("window");
 
 const Signin = () => {
@@ -32,6 +28,7 @@ const Signin = () => {
     password: "",
     name: "",
   });
+  const { t } = useLanguage();
   const { register, login } = useAuth();
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -43,22 +40,21 @@ const Signin = () => {
     const newErrors = {};
 
     if (!formData.email) {
-      newErrors.email = "Email est requis";
+      newErrors.email = t("emailRequired");
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Email est invalide";
+      newErrors.email = t("emailInvalid");
     }
 
     if (currentScreen !== "forgot") {
       if (!formData.password) {
-        newErrors.password = "Mot de passe est requis";
+        newErrors.password = t("passwordRequired");
       } else if (formData.password.length < 6) {
-        newErrors.password =
-          "Le mot de passe doit contenir au moins 6 caractères";
+        newErrors.password = t("passwordMinLength");
       }
     }
 
     if (currentScreen === "signup" && !formData.name) {
-      newErrors.name = "Nom est requis";
+      newErrors.name = t("nameRequired");
     }
 
     setErrors(newErrors);
@@ -70,24 +66,23 @@ const Signin = () => {
 
     switch (error.code) {
       case "auth/email-already-in-use":
-        errorMessage = "Cet email est déjà enregistré.";
+        errorMessage = t("emailAlreadyInUse");
         break;
       case "auth/invalid-email":
-        errorMessage = "Adresse email invalide.";
+        errorMessage = t("invalidEmail");
         break;
       case "auth/weak-password":
-        errorMessage = "Le mot de passe doit contenir au moins 6 caractères.";
+        errorMessage = t("weakPassword");
         break;
       case "auth/user-not-found":
       case "auth/wrong-password":
-        errorMessage = "Email ou mot de passe invalide.";
+        errorMessage = t("wrongPassword") + t("userNotFound");
         break;
       case "auth/too-many-requests":
-        errorMessage = "Trop de tentatives. Veuillez réessayer plus tard.";
+        errorMessage = t("tooManyRequests");
         break;
       case "auth/network-request-failed":
-        errorMessage =
-          "Problème de connexion. Vérifiez votre connexion internet.";
+        errorMessage = t("networkRequestFailed");
         break;
     }
 
@@ -139,8 +134,8 @@ const Signin = () => {
         case "forgot":
           await sendPasswordResetEmail(auth, formData.email);
           Alert.alert(
-            "Succès",
-            "Email de réinitialisation envoyé. Veuillez vérifier votre boîte de réception."
+            t("Success"),
+            t("passwordResetEmailSent", { email: formData.email })
           );
           switchScreen("login", "left");
           break;
@@ -149,7 +144,7 @@ const Signin = () => {
       if (error instanceof FirebaseError) {
         handleFirebaseError(error);
       } else {
-        Alert.alert("Erreur", "Une erreur inattendue est survenue");
+        Alert.alert(t("Error"), t("Errormessage"));
       }
     } finally {
       setLoading(false);
@@ -235,8 +230,8 @@ const Signin = () => {
 
   const renderLoginScreen = () => (
     <View style={styles.formContainer}>
-      <Text style={styles.title}>Bienvenue</Text>
-      <Text style={styles.subtitle}>Connectez-vous pour continuer</Text>
+      <Text style={styles.title}>{t("Bienvenue")}</Text>
+      <Text style={styles.subtitle}>{t("Connectezvous")}</Text>
       {renderInputField("Email", formData.email, "email", "email")}
       {renderInputField(
         "Mot de passe",
@@ -249,7 +244,7 @@ const Signin = () => {
         style={styles.forgotPassword}
         onPress={() => switchScreen("forgot", "right")}
       >
-        <Text style={styles.forgotPasswordText}>Mot de passe oublié ?</Text>
+        <Text style={styles.forgotPasswordText}>{t("motdepasseoublier")}</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={[styles.button, loading && styles.buttonDisabled]}
@@ -259,13 +254,13 @@ const Signin = () => {
         {loading ? (
           <ActivityIndicator color="white" />
         ) : (
-          <Text style={styles.buttonText}>Se connecter</Text>
+          <Text style={styles.buttonText}> {t("Seconnecter")} </Text>
         )}
       </TouchableOpacity>
       <View style={styles.switchContainer}>
-        <Text style={styles.switchText}>Pas encore de compte ? </Text>
+        <Text style={styles.switchText}> {t("pasencoredecompte")} </Text>
         <TouchableOpacity onPress={() => switchScreen("signup", "right")}>
-          <Text style={styles.switchAction}>S'inscrire</Text>
+          <Text style={styles.switchAction}> {t("sinscrire")}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -273,8 +268,8 @@ const Signin = () => {
 
   const renderSignupScreen = () => (
     <View style={styles.formContainer}>
-      <Text style={styles.title}>Créer un compte</Text>
-      <Text style={styles.subtitle}>Inscrivez-vous pour commencer</Text>
+      <Text style={styles.title}>{t("creeruncompte")} </Text>
+      <Text style={styles.subtitle}> {t("inscription")} </Text>
       {renderInputField("Nom complet", formData.name, "name", "person")}
       {renderInputField("Email", formData.email, "email", "email")}
       {renderInputField(
@@ -292,13 +287,13 @@ const Signin = () => {
         {loading ? (
           <ActivityIndicator color="white" />
         ) : (
-          <Text style={styles.buttonText}>S'inscrire</Text>
+          <Text style={styles.buttonText}> {t("sinscrire")} </Text>
         )}
       </TouchableOpacity>
       <View style={styles.switchContainer}>
-        <Text style={styles.switchText}>Déjà un compte ? </Text>
+        <Text style={styles.switchText}> {t("dejauncompte")} </Text>
         <TouchableOpacity onPress={() => switchScreen("login", "left")}>
-          <Text style={styles.switchAction}>Se connecter</Text>
+          <Text style={styles.switchAction}> {t("Seconnecter")}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -307,9 +302,7 @@ const Signin = () => {
   const renderForgotPasswordScreen = () => (
     <View style={styles.formContainer}>
       <Text style={styles.title}>Réinitialiser</Text>
-      <Text style={styles.subtitle}>
-        Entrez votre email pour réinitialiser le mot de passe
-      </Text>
+      <Text style={styles.subtitle}>{t("reinitialisation")}</Text>
       {renderInputField("Email", formData.email, "email", "email")}
       <TouchableOpacity
         style={[styles.button, loading && styles.buttonDisabled]}
@@ -319,13 +312,13 @@ const Signin = () => {
         {loading ? (
           <ActivityIndicator color="white" />
         ) : (
-          <Text style={styles.buttonText}>Envoyer le lien</Text>
+          <Text style={styles.buttonText}>{t("sendlink")}</Text>
         )}
       </TouchableOpacity>
       <View style={styles.switchContainer}>
         <Text style={styles.switchText}>Retour à </Text>
         <TouchableOpacity onPress={() => switchScreen("login", "left")}>
-          <Text style={styles.switchAction}>la connexion</Text>
+          <Text style={styles.switchAction}>{t("theconnextion")}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -420,7 +413,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   button: {
-    backgroundColor: "#007AFF",
+    backgroundColor: "#003333",
     borderRadius: 10,
     height: 50,
     justifyContent: "center",
@@ -445,7 +438,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   switchAction: {
-    color: "#007AFF",
+    color: "#003333",
     fontSize: 14,
     fontWeight: "bold",
   },
